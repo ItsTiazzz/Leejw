@@ -1,16 +1,11 @@
-# leejw
+# Leejw
 
-A new Flutter project.
+A brand new way to learn vocabulary, all Open Source and built for students, by a student.
 
 ## Getting Started
 
-This project is a starting point for a Flutter application.
+Leejw is currently not publicly available as a deployment. If you want to use it, clone this repository and [build the app yourself using Flutter](https://docs.flutter.dev/deployment/web).
 
-A few resources to get you started if this is your first Flutter project:
+## Summer of Making
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+Leejw is being made for the [Summer of Making](https://summer.hack.club/rv) program by Hackclub.
