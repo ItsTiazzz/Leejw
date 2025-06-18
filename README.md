@@ -1,4 +1,5 @@
 # Leejw
+![leejw_banner.png](./leejw_banner.png)
 
 A brand new way to learn vocabulary, all Open Source and built for students, by a student.
 
