@@ -1,0 +1,13 @@
+{
+
+  "dashboard_title": "Dashboard",
+  "dashboard_goto": "Go to Dashboard",
+  "flashcards_title": "Flashcards",
+  "flashcards_goto": "Go to Flashcards",
+  "lessons_title": "Lessons",
+  "lessons_goto": "Go to your Lessons",
+  "settings_title": "Settings",
+  "settings_goto": "Go to Settings",
+  "voced_title": "VocEd",
+  "voced_goto": "Go to the VocEd"
+}
