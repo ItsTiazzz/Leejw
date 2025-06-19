@@ -5,7 +5,7 @@ A brand new way to learn vocabulary, all Open Source and built for students, by 
 
 ## Getting Started
 
-Leejw is currently not publicly available as a deployment. If you want to use it, clone this repository and [build the app yourself using Flutter](https://docs.flutter.dev/deployment/web) in whatever way you want. I am opting to make it a **web app** though!
+Leejw is currently not publicly available as a deployment. If you want to use it, clone this repository and [build the app yourself using Flutter](https://docs.flutter.dev/deployment/windows) in whatever way you want. I am opting to make it a **Windows/Mobile app** though!
 
 ## Summer of Making
 
