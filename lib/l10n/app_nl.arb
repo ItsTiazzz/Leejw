@@ -8,5 +8,6 @@
   "settings_title": "Instellingen",
   "settings_goto": "Ga naar de Instellingen",
   "voced_title": "VocEd",
-  "voced_goto": "Ga naar de VocEd"
+  "voced_goto": "Ga naar de VocEd",
+  "voced_create_lesson": "Maak nieuwe les"
 }

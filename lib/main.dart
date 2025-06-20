@@ -7,7 +7,7 @@ import 'package:leejw/voced/voced.dart';
 import 'package:provider/provider.dart';
 
 void main() {
-  // initVocEd();
+  initVocEd();
   runApp(const LeejwApp());
 }
 
@@ -81,14 +81,13 @@ class _HomePageState extends State<HomePage> {
     var selectedIndex = gState.selectedIndex;
     var l10n = AppLocalizations.of(context)!;
 
-    Widget page;
-    switch (selectedIndex) {
-      case 0: page = Dashboard();
-      case 1: page = FlashPage();
-      case 2: page = SettingsPage();
-      case 3: page = VocEditorPage();
-      default: throw UnimplementedError('No "page" widget for requested index: $selectedIndex');
-    }
+    Widget page = switch (selectedIndex) {
+      0 => Dashboard(),
+      1 => FlashPage(),
+      2 => SettingsPage(),
+      3 => VocEditorPage(),
+      _ => throw UnimplementedError('No "page" widget for requested index: $selectedIndex')
+    };
 
     return LayoutBuilder(
       builder: (context, constraints) {
@@ -96,62 +95,62 @@ class _HomePageState extends State<HomePage> {
           body: Row(
             children: [
               SafeArea(
-                // child: MouseRegion(
-                //   onEnter: (event) => setState(() => hoveringForExtension = true),
-                //   onExit: (event) => setState(() => hoveringForExtension = false),
-                //   child: NavigationRail(
-                //     extended: extensionOverride ? true : hoveringForExtension,
-                //     minExtendedWidth: 180,
-                //     destinations: [
-                //       NavigationRailDestination(
-                //         icon: Icon(Icons.dashboard_outlined),
-                //         label: Text(l10n.dashboard_title),
-                //       ),
-                //       NavigationRailDestination(
-                //         icon: Icon(Icons.flash_on_outlined),
-                //         label: Text(l10n.flashcards_title),
-                //       ),
-                //       NavigationRailDestination(
-                //         icon: Icon(Icons.settings_suggest_outlined),
-                //         label: Text(l10n.settings_title)
-                //       ),
-                //       NavigationRailDestination(
-                //         icon: Icon(Icons.collections_bookmark_outlined), 
-                //         label: Text(l10n.voced_title)
-                //       )
-                //     ],
-                //     selectedIndex: selectedIndex,
-                //     onDestinationSelected: (value) {
-                //       setState(() {
-                //         gState.setSelectedIndex(value);
-                //       });
-                //     },
-                //   ),
-                // ),
-                child: NavigationBar(
-                  onDestinationSelected: (value) {
-                    setState(() => gState.setSelectedIndex(value));
-                  },
-                  selectedIndex: selectedIndex,
-                  destinations: [
-                    NavigationDestination(
-                      icon: Icon(Icons.dashboard_outlined),
-                      label: l10n.dashboard_title,
-                    ),
-                    NavigationDestination(
-                      icon: Icon(Icons.flash_on_outlined),
-                      label: l10n.flashcards_title,
-                    ),
-                    NavigationDestination(
-                      icon: Icon(Icons.settings_suggest_outlined),
-                      label: l10n.settings_title,
-                    ),
-                    NavigationDestination(
-                      icon: Icon(Icons.collections_bookmark_outlined), 
-                      label: l10n.voced_title,
-                    )
-                  ]
+                child: MouseRegion(
+                  onEnter: (event) => setState(() => hoveringForExtension = true),
+                  onExit: (event) => setState(() => hoveringForExtension = false),
+                  child: NavigationRail(
+                    extended: extensionOverride ? true : hoveringForExtension,
+                    minExtendedWidth: 180,
+                    destinations: [
+                      NavigationRailDestination(
+                        icon: Icon(Icons.dashboard_outlined),
+                        label: Text(l10n.dashboard_title),
+                      ),
+                      NavigationRailDestination(
+                        icon: Icon(Icons.flash_on_outlined),
+                        label: Text(l10n.flashcards_title),
+                      ),
+                      NavigationRailDestination(
+                        icon: Icon(Icons.settings_suggest_outlined),
+                        label: Text(l10n.settings_title)
+                      ),
+                      NavigationRailDestination(
+                        icon: Icon(Icons.collections_bookmark_outlined), 
+                        label: Text(l10n.voced_title)
+                      )
+                    ],
+                    selectedIndex: selectedIndex,
+                    onDestinationSelected: (value) {
+                      setState(() {
+                        gState.setSelectedIndex(value);
+                      });
+                    },
+                  ),
                 ),
+                // child: NavigationBar(
+                //   onDestinationSelected: (value) {
+                //     setState(() => gState.setSelectedIndex(value));
+                //   },
+                //   selectedIndex: selectedIndex,
+                //   destinations: [
+                //     NavigationDestination(
+                //       icon: Icon(Icons.dashboard_outlined),
+                //       label: l10n.dashboard_title,
+                //     ),
+                //     NavigationDestination(
+                //       icon: Icon(Icons.flash_on_outlined),
+                //       label: l10n.flashcards_title,
+                //     ),
+                //     NavigationDestination(
+                //       icon: Icon(Icons.settings_suggest_outlined),
+                //       label: l10n.settings_title,
+                //     ),
+                //     NavigationDestination(
+                //       icon: Icon(Icons.collections_bookmark_outlined), 
+                //       label: l10n.voced_title,
+                //     )
+                //   ]
+                // ),
               ),
               Expanded(
                 child: Container(

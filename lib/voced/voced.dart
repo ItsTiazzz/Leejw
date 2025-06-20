@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:leejw/l10n/app_localizations.dart';
 import 'package:leejw/voced/json/json.dart';
 
 part 'voced.g.dart';
@@ -22,7 +23,22 @@ class VocEditorPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Placeholder();
+    var l10n = AppLocalizations.of(context)!;
+
+    return Column(
+      children: [
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: ElevatedButton.icon(
+            icon: Icon(Icons.note_add_outlined),
+            onPressed: () {
+              
+            },
+            label: Text(l10n.voced_create_lesson)
+          ),
+        )
+      ],
+    );
   }
 }
 
@@ -98,14 +114,6 @@ const exampleJson = '''
       {
         "locale": "fr",
         "translation": "Salut"
-      },
-      {
-        "locale": "es",
-        "translation": "Hola"
-      },
-      {
-        "locale": "es",
-        "translation": "Hola"
       },
       {
         "locale": "es",
