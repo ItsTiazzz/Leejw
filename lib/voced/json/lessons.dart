@@ -1,20 +1,25 @@
-import 'dart:io';
 import 'dart:ui';
 
 import 'package:json_annotation/json_annotation.dart';
 import 'package:leejw/voced/json/json.dart';
+import 'package:leejw/voced/voced.dart';
 
 part 'lessons.g.dart';
 
+class Lesson {
+  final LessonMetaData metaData;
+  final List<VocEdEntry> vocEntries;
+
+  Lesson(this.metaData, this.vocEntries);
+}
+
 @JsonSerializable(explicitToJson: true)
 class LessonMetaData {
-  @DirectoryJsonConverter()
-  final Directory dir;
   final String title;
   final String description;
   final List<LessonTag> tags;
 
-  LessonMetaData(this.dir, this.title, this.description, this.tags);
+  LessonMetaData(this.title, this.description, this.tags);
 
   factory LessonMetaData.fromJson(Map<String, dynamic> json) => _$LessonMetaDataFromJson(json);
   Map<String, dynamic> toJson() => _$LessonMetaDataToJson(this);

@@ -1,4 +1,4 @@
-import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:leejw/voced/voced.dart';
@@ -12,7 +12,9 @@ class FlashPage extends StatelessWidget {
       child: GridView(
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3),
         children: [
-          VocEdEntryCard(entry: VocEdEntry.fromJson(jsonDecode(exampleJson))),
+          for (var lsn in lessons)
+            for (var vce in lsn.vocEntries)
+              VocEdEntryCard(entry: vce),
         ],
       ),
     );

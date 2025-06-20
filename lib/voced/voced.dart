@@ -1,21 +1,55 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:leejw/l10n/app_localizations.dart';
 import 'package:leejw/voced/json/json.dart';
+import 'package:path/path.dart';
+import 'package:path_provider/path_provider.dart';
 
 part 'voced.g.dart';
 
-final Directory vocedDir = Directory.fromUri(Uri.directory('./voced/', windows: Platform.isWindows));
-final Directory lessonsDir = Directory.fromUri(Uri.directory('./voced/lessons/', windows: Platform.isWindows));
-final List<Directory> lessons = <Directory>[];
+final List<Lesson> lessons = <Lesson>[];
 
-void initVocEd() {
-  vocedDir.create();
-  lessonsDir.create();
+void initVocEd() async {
+  Directory? appDir = await getApplicationSupportDirectory();
+  final Directory vocedDir = Directory('${appDir.path}/voced');
+  final Directory lessonsDir = Directory('${appDir.path}/voced/lessons');
 
-  for (var fileSystemEntity in lessonsDir.listSync()) if (fileSystemEntity is Directory) lessons.add(fileSystemEntity);
+  await vocedDir.create(recursive: true);
+  await lessonsDir.create(recursive: true);
+
+  print('Initialised ${lessonsDir.path}');
+
+  await for (var entity in lessonsDir.list(recursive: true, followLinks: false)) {
+    if (entity is Directory) {
+      LessonMetaData? metaData;
+      List<VocEdEntry> vocEntries = <VocEdEntry>[];
+
+      await for (var nestEntity in entity.list(followLinks: false)) {
+
+        if (nestEntity is File) {
+          File file = nestEntity;
+
+          if (!basename(file.path).contains('json')) continue;
+
+          String content = await file.readAsString();
+
+          if (basename(file.path) == 'metadata.json') {
+            metaData = LessonMetaData.fromJson(jsonDecode(content));
+          } else {
+            final vocEntry = VocEdEntry.fromJson(jsonDecode(content));
+            vocEntries.add(vocEntry);
+          }
+        }
+      }
+
+      lessons.add(Lesson(metaData!, vocEntries));
+    }
+  }
+
+  print('Lessons: ${lessons.length}');
 }
 
 class VocEditorPage extends StatelessWidget {
@@ -25,19 +59,12 @@ class VocEditorPage extends StatelessWidget {
   Widget build(BuildContext context) {
     var l10n = AppLocalizations.of(context)!;
 
-    return Column(
-      children: [
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: ElevatedButton.icon(
-            icon: Icon(Icons.note_add_outlined),
-            onPressed: () {
-              
-            },
-            label: Text(l10n.voced_create_lesson)
-          ),
-        )
-      ],
+    return ElevatedButton.icon(
+      icon: Icon(Icons.note_add_outlined),
+      onPressed: () {
+        
+      },
+      label: Text(l10n.voced_create_lesson)
     );
   }
 }
