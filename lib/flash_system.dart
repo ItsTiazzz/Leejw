@@ -1,6 +1,5 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
+import 'package:leejw/voced/json/lessons.dart';
 import 'package:leejw/voced/voced.dart';
 
 class FlashPage extends StatelessWidget {
@@ -8,15 +7,22 @@ class FlashPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: GridView(
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3),
-        children: [
-          for (var lsn in lessons)
-            for (var vce in lsn.vocEntries)
-              VocEdEntryCard(entry: vce),
-        ],
-      ),
+    return Column(
+      children: [
+        ElevatedButton.icon(
+          onPressed: () => loadLessons(),
+          label: Text("Reload Lessons"),
+          icon: Icon(Icons.loop),
+        ),
+        Expanded(
+          child: ListView(
+            children: [
+              for (var lsn in lessons)
+                LessonCard(lesson: lsn),
+            ],
+          ),
+        ),
+      ],
     );
   }
 }
