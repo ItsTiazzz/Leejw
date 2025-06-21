@@ -13,6 +13,11 @@ part 'voced.g.dart';
 final List<Lesson> lessons = <Lesson>[];
 
 void initVocEd() async {
+  await loadLessons();
+}
+
+Future<void> loadLessons() async {
+  lessons.clear();
   Directory? appDir = await getApplicationSupportDirectory();
   final Directory vocedDir = Directory('${appDir.path}/voced');
   final Directory lessonsDir = Directory('${appDir.path}/voced/lessons');
@@ -59,12 +64,16 @@ class VocEditorPage extends StatelessWidget {
   Widget build(BuildContext context) {
     var l10n = AppLocalizations.of(context)!;
 
-    return ElevatedButton.icon(
-      icon: Icon(Icons.note_add_outlined),
-      onPressed: () {
-        
-      },
-      label: Text(l10n.voced_create_lesson)
+    return Column(
+      children: [
+        ElevatedButton.icon(
+          icon: Icon(Icons.note_add_outlined),
+          onPressed: () {
+            
+          },
+          label: Text(l10n.voced_create_lesson)
+        ),
+      ],
     );
   }
 }
