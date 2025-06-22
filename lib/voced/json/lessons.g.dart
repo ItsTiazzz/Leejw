@@ -8,7 +8,6 @@ part of 'lessons.dart';
 
 LessonMetaData _$LessonMetaDataFromJson(Map<String, dynamic> json) =>
     LessonMetaData(
-      const DirectoryJsonConverter().fromJson(json['dir'] as String),
       json['title'] as String,
       json['description'] as String,
       (json['tags'] as List<dynamic>)
@@ -18,7 +17,6 @@ LessonMetaData _$LessonMetaDataFromJson(Map<String, dynamic> json) =>
 
 Map<String, dynamic> _$LessonMetaDataToJson(LessonMetaData instance) =>
     <String, dynamic>{
-      'dir': const DirectoryJsonConverter().toJson(instance.dir),
       'title': instance.title,
       'description': instance.description,
       'tags': instance.tags.map((e) => e.toJson()).toList(),

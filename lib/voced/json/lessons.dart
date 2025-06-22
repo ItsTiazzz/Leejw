@@ -1,20 +1,73 @@
-import 'dart:io';
-import 'dart:ui';
-
+import 'package:flutter/material.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:leejw/voced/json/json.dart';
+import 'package:leejw/voced/voced.dart';
 
 part 'lessons.g.dart';
 
+class Lesson {
+  final LessonMetaData metaData;
+  final List<VocEdEntry> vocEntries;
+
+  Lesson(this.metaData, this.vocEntries);
+}
+
+class LessonCard extends StatelessWidget {
+  final Lesson lesson;
+  const LessonCard({super.key, required this.lesson});
+
+  @override
+  Widget build(BuildContext context) {
+    var theme = Theme.of(context);
+
+    return Card(
+      elevation: 20,
+      color: theme.cardColor.withAlpha(100),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadiusGeometry.all(Radius.circular(30))),
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          children: [
+            Text(lesson.metaData.title, style: theme.textTheme.titleLarge,),
+            SizedBox(height: 2,),
+            Text('${lesson.metaData.description}; Tags:', style: theme.textTheme.labelSmall,),
+            Wrap(
+              children: [
+                for (var tag in lesson.metaData.tags)
+                  Card(
+                    child: Padding(
+                      padding: const EdgeInsets.all(6.0),
+                      child: Text(tag.name, style: theme.textTheme.labelSmall,),
+                    ),
+                  ),
+              ],
+            ),
+            SizedBox(height: 10,),
+            for (var i = 0; i < 2; i++)
+              Card(
+                color: theme.cardColor.withValues(),
+                child: Wrap(
+                  children: [
+                    for (var vce in lesson.vocEntries)
+                      for (var translation in vce.vocWord.translations)
+                        Text('${translation.translation} ', overflow: TextOverflow.fade,),
+                  ],
+                ),
+              ),
+          ],
+        )
+      ),
+    );
+  }
+}
+
 @JsonSerializable(explicitToJson: true)
 class LessonMetaData {
-  @DirectoryJsonConverter()
-  final Directory dir;
   final String title;
   final String description;
   final List<LessonTag> tags;
 
-  LessonMetaData(this.dir, this.title, this.description, this.tags);
+  LessonMetaData(this.title, this.description, this.tags);
 
   factory LessonMetaData.fromJson(Map<String, dynamic> json) => _$LessonMetaDataFromJson(json);
   Map<String, dynamic> toJson() => _$LessonMetaDataToJson(this);

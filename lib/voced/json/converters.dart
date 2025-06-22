@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'dart:ui';
 
 import 'package:json_annotation/json_annotation.dart';
@@ -29,19 +28,4 @@ class DateTimeJsonConverter extends JsonConverter<DateTime, String> {
   String toJson(DateTime object) {
     return object.toString();
   }
-}
-
-class DirectoryJsonConverter extends JsonConverter<Directory, String> {
-  const DirectoryJsonConverter();
-
-  @override
-  Directory fromJson(String json) {
-    return Directory.fromUri(Uri.directory(json, windows: Platform.isWindows));
-  }
-
-  @override
-  String toJson(Directory object) {
-    return object.uri.toString();
-  }
-  
 }

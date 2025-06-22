@@ -7,8 +7,8 @@ import 'package:leejw/voced/voced.dart';
 import 'package:provider/provider.dart';
 
 void main() {
-  initVocEd();
   runApp(const LeejwApp());
+  initVocEd();
 }
 
 class LeejwApp extends StatelessWidget {
@@ -23,6 +23,7 @@ class LeejwApp extends StatelessWidget {
 
         return MaterialApp(
           title: 'Leejw',
+          debugShowCheckedModeBanner: false,
           localizationsDelegates: AppLocalizations.localizationsDelegates,
           supportedLocales: AppLocalizations.supportedLocales,
           theme: gState.appThemeData,
@@ -72,7 +73,6 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
 
-  var hoveringForExtension = false;
   var extensionOverride = false;
 
   @override
@@ -92,91 +92,137 @@ class _HomePageState extends State<HomePage> {
     return LayoutBuilder(
       builder: (context, constraints) {
         return Scaffold(
-          body: Row(
+          appBar: AppBar(
+            title: Row(
+              children: [
+                Icon(Icons.animation_outlined),
+                SizedBox(width: 5,),
+                Text('Leejw'),
+              ],
+            ),
+            actions: [],
+          ),
+          body: Column(
             children: [
-              SafeArea(
-                child: MouseRegion(
-                  onEnter: (event) => setState(() => hoveringForExtension = true),
-                  onExit: (event) => setState(() => hoveringForExtension = false),
-                  child: NavigationRail(
-                    extended: extensionOverride ? true : hoveringForExtension,
-                    minExtendedWidth: 180,
-                    destinations: [
-                      NavigationRailDestination(
-                        icon: Icon(Icons.dashboard_outlined),
-                        label: Text(l10n.dashboard_title),
-                      ),
-                      NavigationRailDestination(
-                        icon: Icon(Icons.flash_on_outlined),
-                        label: Text(l10n.flashcards_title),
-                      ),
-                      NavigationRailDestination(
-                        icon: Icon(Icons.settings_suggest_outlined),
-                        label: Text(l10n.settings_title)
-                      ),
-                      NavigationRailDestination(
-                        icon: Icon(Icons.collections_bookmark_outlined), 
-                        label: Text(l10n.voced_title)
-                      )
-                    ],
-                    selectedIndex: selectedIndex,
-                    onDestinationSelected: (value) {
-                      setState(() {
-                        gState.setSelectedIndex(value);
-                      });
-                    },
-                  ),
-                ),
-                // child: NavigationBar(
-                //   onDestinationSelected: (value) {
-                //     setState(() => gState.setSelectedIndex(value));
-                //   },
-                //   selectedIndex: selectedIndex,
-                //   destinations: [
-                //     NavigationDestination(
-                //       icon: Icon(Icons.dashboard_outlined),
-                //       label: l10n.dashboard_title,
-                //     ),
-                //     NavigationDestination(
-                //       icon: Icon(Icons.flash_on_outlined),
-                //       label: l10n.flashcards_title,
-                //     ),
-                //     NavigationDestination(
-                //       icon: Icon(Icons.settings_suggest_outlined),
-                //       label: l10n.settings_title,
-                //     ),
-                //     NavigationDestination(
-                //       icon: Icon(Icons.collections_bookmark_outlined), 
-                //       label: l10n.voced_title,
-                //     )
-                //   ]
-                // ),
-              ),
               Expanded(
                 child: Container(
                   color: Theme.of(context).colorScheme.primaryContainer,
                   child: page,
+                )
+              ),
+              SafeArea(
+                child: NavigationBar(
+                  onDestinationSelected: (value) {
+                  setState(() => gState.setSelectedIndex(value));
+                  },
+                  selectedIndex: selectedIndex,
+                  destinations: [
+                    NavigationDestination(
+                      icon: Icon(Icons.dashboard_outlined),
+                      label: l10n.dashboard_title,
+                    ),
+                    NavigationDestination(
+                      icon: Icon(Icons.flash_on_outlined),
+                      label: l10n.flashcards_title,
+                    ),
+                    NavigationDestination(
+                      icon: Icon(Icons.settings_suggest_outlined),
+                      label: l10n.settings_title,
+                    ),
+                    NavigationDestination(
+                      icon: Icon(Icons.collections_bookmark_outlined), 
+                      label: l10n.voced_title,
+                    )
+                  ]
                 ),
               ),
             ],
           ),
-          floatingActionButton: MouseRegion(
-            onEnter: (event) => setState(() => hoveringForExtension = true),
-            onExit: (event) => setState(() => hoveringForExtension = false),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                IconButton(
-                  onPressed: () => gState.nextMode(),
-                  icon: Icon(gState.isDarkMode() ? Icons.light_mode_outlined : Icons.dark_mode_outlined),
-                ),
-                IconButton(
-                  onPressed: () => setState(() => extensionOverride = !extensionOverride),
-                  icon: Icon(extensionOverride ? Icons.push_pin : Icons.push_pin_outlined,),
-                ),
-              ],
-            ),
-          ),
+          // body: Row(
+          //   children: [
+          //     SafeArea(
+          //       child: MouseRegion(
+          //         onEnter: (event) => setState(() => hoveringForExtension = true),
+          //         onExit: (event) => setState(() => hoveringForExtension = false),
+          //         child: NavigationRail(
+          //           extended: extensionOverride ? true : hoveringForExtension,
+          //           minExtendedWidth: 180,
+          //           destinations: [
+          //             NavigationRailDestination(
+          //               icon: Icon(Icons.dashboard_outlined),
+          //               label: Text(l10n.dashboard_title),
+          //             ),
+          //             NavigationRailDestination(
+          //               icon: Icon(Icons.flash_on_outlined),
+          //               label: Text(l10n.flashcards_title),
+          //             ),
+          //             NavigationRailDestination(
+          //               icon: Icon(Icons.settings_suggest_outlined),
+          //               label: Text(l10n.settings_title)
+          //             ),
+          //             NavigationRailDestination(
+          //               icon: Icon(Icons.collections_bookmark_outlined), 
+          //               label: Text(l10n.voced_title)
+          //             )
+          //           ],
+          //           selectedIndex: selectedIndex,
+          //           onDestinationSelected: (value) {
+          //             setState(() {
+          //               gState.setSelectedIndex(value);
+          //             });
+          //           },
+          //         ),
+          //       ),
+          //       // child: NavigationBar(
+          //       //   onDestinationSelected: (value) {
+          //       //     setState(() => gState.setSelectedIndex(value));
+          //       //   },
+          //       //   selectedIndex: selectedIndex,
+          //       //   destinations: [
+          //       //     NavigationDestination(
+          //       //       icon: Icon(Icons.dashboard_outlined),
+          //       //       label: l10n.dashboard_title,
+          //       //     ),
+          //       //     NavigationDestination(
+          //       //       icon: Icon(Icons.flash_on_outlined),
+          //       //       label: l10n.flashcards_title,
+          //       //     ),
+          //       //     NavigationDestination(
+          //       //       icon: Icon(Icons.settings_suggest_outlined),
+          //       //       label: l10n.settings_title,
+          //       //     ),
+          //       //     NavigationDestination(
+          //       //       icon: Icon(Icons.collections_bookmark_outlined), 
+          //       //       label: l10n.voced_title,
+          //       //     )
+          //       //   ]
+          //       // ),
+          //     ),
+          //     Expanded(
+          //       child: Container(
+          //         color: Theme.of(context).colorScheme.primaryContainer,
+          //         child: page,
+          //       ),
+          //     ),
+          //   ],
+          // ),
+          // floatingActionButton: MouseRegion(
+          //   onEnter: (event) => setState(() => hoveringForExtension = true),
+          //   onExit: (event) => setState(() => hoveringForExtension = false),
+          //   child: Column(
+          //     mainAxisAlignment: MainAxisAlignment.end,
+          //     children: [
+          //       IconButton(
+          //         onPressed: () => gState.nextMode(),
+          //         icon: Icon(gState.isDarkMode() ? Icons.light_mode_outlined : Icons.dark_mode_outlined),
+          //       ),
+          //       IconButton(
+          //         onPressed: () => setState(() => extensionOverride = !extensionOverride),
+          //         icon: Icon(extensionOverride ? Icons.push_pin : Icons.push_pin_outlined,),
+          //       ),
+          //     ],
+          //   ),
+          // ),
           floatingActionButtonLocation: FloatingActionButtonLocation.startFloat,
         );
       }
