@@ -10,51 +10,51 @@ import 'package:path_provider/path_provider.dart';
 
 part 'voced.g.dart';
 
-final List<Lesson> lessons = <Lesson>[];
+class VocEdState with ChangeNotifier {
+  final List<Lesson> lessons = <Lesson>[];
 
-void initVocEd() async {
-  await loadLessons();
-}
+  void loadLessons() async {
+    lessons.clear();
+    Directory? appDir = await getApplicationSupportDirectory();
+    final Directory vocedDir = Directory('${appDir.path}/voced');
+    final Directory lessonsDir = Directory('${appDir.path}/voced/lessons');
 
-Future<void> loadLessons() async {
-  lessons.clear();
-  Directory? appDir = await getApplicationSupportDirectory();
-  final Directory vocedDir = Directory('${appDir.path}/voced');
-  final Directory lessonsDir = Directory('${appDir.path}/voced/lessons');
+    await vocedDir.create(recursive: true);
+    await lessonsDir.create(recursive: true);
 
-  await vocedDir.create(recursive: true);
-  await lessonsDir.create(recursive: true);
+    print('Initialised ${lessonsDir.path}');
 
-  print('Initialised ${lessonsDir.path}');
+    await for (var entity in lessonsDir.list(recursive: true, followLinks: false)) {
+      if (entity is Directory) {
+        LessonMetaData? metaData;
+        List<VocEdEntry> vocEntries = <VocEdEntry>[];
 
-  await for (var entity in lessonsDir.list(recursive: true, followLinks: false)) {
-    if (entity is Directory) {
-      LessonMetaData? metaData;
-      List<VocEdEntry> vocEntries = <VocEdEntry>[];
+        await for (var nestEntity in entity.list(followLinks: false)) {
 
-      await for (var nestEntity in entity.list(followLinks: false)) {
+          if (nestEntity is File) {
+            File file = nestEntity;
 
-        if (nestEntity is File) {
-          File file = nestEntity;
+            if (!basename(file.path).contains('json')) continue;
 
-          if (!basename(file.path).contains('json')) continue;
+            String content = await file.readAsString();
 
-          String content = await file.readAsString();
-
-          if (basename(file.path) == 'metadata.json') {
-            metaData = LessonMetaData.fromJson(jsonDecode(content));
-          } else {
-            final vocEntry = VocEdEntry.fromJson(jsonDecode(content));
-            vocEntries.add(vocEntry);
+            if (basename(file.path) == 'metadata.json') {
+              metaData = LessonMetaData.fromJson(jsonDecode(content));
+            } else {
+              final vocEntry = VocEdEntry.fromJson(jsonDecode(content));
+              vocEntries.add(vocEntry);
+            }
           }
         }
+
+        lessons.add(Lesson(metaData!, vocEntries));
       }
-
-      lessons.add(Lesson(metaData!, vocEntries));
     }
-  }
 
-  print('Lessons: ${lessons.length}');
+    print('Lessons: ${lessons.length}');
+
+    notifyListeners();
+  }
 }
 
 class VocEditorPage extends StatelessWidget {
@@ -132,40 +132,3 @@ class VocEdEntryCard extends StatelessWidget {
     );
   }
 }
-
-const exampleJson = '''
-{
-  "metadata": {
-    "word": "Hello",
-    "identifier": "hello",
-    "origin_locale": "en",
-    "modified": "2023-05-10"
-  },
-  "voc_data": {
-    "translations": [
-      {
-        "locale": "nl",
-        "translation": "Hallo"
-      },
-      {
-        "locale": "fr",
-        "translation": "Salut"
-      },
-      {
-        "locale": "es",
-        "translation": "Hola"
-      }
-    ],
-    "meanings": [
-      {
-        "locale": "en",
-        "meaning": "A greeting word."
-      },
-      {
-        "locale": "nl",
-        "meaning": "Een groetwoord."
-      }
-    ]
-  }
-}
-''';

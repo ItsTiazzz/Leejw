@@ -3,8 +3,8 @@ import 'package:leejw/voced/json/lessons.dart';
 import 'package:leejw/voced/voced.dart';
 import 'package:provider/provider.dart';
 
-class FlashPage extends StatelessWidget {
-  const FlashPage({super.key});
+class LessonPage extends StatelessWidget {
+  const LessonPage({super.key});
 
   @override
   Widget build(BuildContext context) {

@@ -12,50 +12,71 @@ class Lesson {
   Lesson(this.metaData, this.vocEntries);
 }
 
-class LessonCard extends StatelessWidget {
+class LessonCard extends StatefulWidget {
   final Lesson lesson;
   const LessonCard({super.key, required this.lesson});
+
+  @override
+  State<LessonCard> createState() => _LessonCardState();
+}
+
+class _LessonCardState extends State<LessonCard> {
+  double opacity = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    Future.delayed(Duration(milliseconds: 200), () {
+      setState(() {
+        opacity = 1;
+      });
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     var theme = Theme.of(context);
 
-    return Card(
-      elevation: 20,
-      color: theme.cardColor.withAlpha(100),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadiusGeometry.all(Radius.circular(30))),
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Column(
-          children: [
-            Text(lesson.metaData.title, style: theme.textTheme.titleLarge,),
-            SizedBox(height: 2,),
-            Text('${lesson.metaData.description}; Tags:', style: theme.textTheme.labelSmall,),
-            Wrap(
-              children: [
-                for (var tag in lesson.metaData.tags)
-                  Card(
-                    child: Padding(
-                      padding: const EdgeInsets.all(6.0),
-                      child: Text(tag.name, style: theme.textTheme.labelSmall,),
+    return AnimatedOpacity(
+      opacity: opacity,
+      duration: const Duration(milliseconds: 200),
+      child: Card(
+        elevation: 20,
+        color: theme.cardColor.withAlpha(100),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadiusGeometry.all(Radius.circular(30))),
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            children: [
+              Text(widget.lesson.metaData.title, style: theme.textTheme.titleLarge,),
+              SizedBox(height: 2,),
+              Text('${widget.lesson.metaData.description}; Tags:', style: theme.textTheme.labelSmall,),
+              Wrap(
+                children: [
+                  for (var tag in widget.lesson.metaData.tags)
+                    Card(
+                      child: Padding(
+                        padding: const EdgeInsets.all(6.0),
+                        child: Text(tag.name, style: theme.textTheme.labelSmall,),
+                      ),
                     ),
-                  ),
-              ],
-            ),
-            SizedBox(height: 10,),
-            for (var i = 0; i < 2; i++)
-              Card(
-                color: theme.cardColor.withValues(),
-                child: Wrap(
-                  children: [
-                    for (var vce in lesson.vocEntries)
-                      for (var translation in vce.vocWord.translations)
-                        Text('${translation.translation} ', overflow: TextOverflow.fade,),
-                  ],
-                ),
+                ],
               ),
-          ],
-        )
+              SizedBox(height: 10,),
+              for (var i = 0; i < 2; i++)
+                Card(
+                  color: theme.cardColor.withValues(),
+                  child: Wrap(
+                    children: [
+                      for (var vce in widget.lesson.vocEntries)
+                        for (var translation in vce.vocWord.translations)
+                          Text('${translation.translation} ', overflow: TextOverflow.fade,),
+                    ],
+                  ),
+                ),
+            ],
+          )
+        ),
       ),
     );
   }
