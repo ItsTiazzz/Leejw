@@ -1,4 +1,4 @@
-# Leejw
+# Leejw ![hackatime](https://hackatime-badge.hackclub.com/U092C5L03NU/leejw)
 ![leejw_banner.png](./leejw_banner.png)
 
 A brand new way to learn vocabulary, all Open Source and built for students, by a student.
