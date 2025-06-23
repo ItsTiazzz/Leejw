@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:leejw/l10n/app_localizations.dart';
 import 'package:leejw/main.dart';
 import 'package:provider/provider.dart';
 
@@ -8,16 +9,17 @@ class SettingsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var gState = context.watch<GlobalState>();
+    var l10n = AppLocalizations.of(context)!;
 
     return ListView(
       children: [
-        SettingTitleCard(title: "Theme", icon: Icon(Icons.format_paint_outlined),),
+        SettingTitleCard(title: l10n.generic_theme, icon: Icon(Icons.format_paint_outlined),),
         SettingCard(
-          message: "Change to ${gState.isDarkMode() ? "light" : "dark"} mode.",
+          message: l10n.settings_toggle_mode(gState.isDarkMode() ? l10n.generic_light : l10n.generic_dark),
           icon: Icon(gState.isDarkMode() ? Icons.light_mode_outlined : Icons.dark_mode_outlined),
           onTap: () => gState.nextMode(),
         ),
-        SettingTitleCard(title: "Accessibility", icon: Icon(Icons.accessibility_new_outlined),),
+        SettingTitleCard(title: l10n.generic_accessibility, icon: Icon(Icons.accessibility_new_outlined),),
         LocaleSettingCard(),
       ],
     );
@@ -78,22 +80,27 @@ class LocaleSettingCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var l10n = AppLocalizations.of(context)!;
+
     return Card(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(20))),
       child: ListTile(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(20))),
         leading: Icon(Icons.language_outlined),
-        title: Text("Change locale."),
+        title: Text(l10n.settings_change_locale),
         onTap: () {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: Text("Locales are currently defined by your device settings!"),
+              content: Text(l10n.snackbar_locale_definement),
               showCloseIcon: true,
-              // width: 280.0,
-              // padding: const EdgeInsets.symmetric(
-              //   horizontal: 8.0,
-              // ),
+              action: SnackBarAction(
+                label: l10n.action_open_locale_settings,
+                onPressed: () {
+                  throw UnimplementedError('We currently don\'t support switching to your settings.');
+                },
+              ),
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
+              behavior: SnackBarBehavior.floating,
             )
           );
         },

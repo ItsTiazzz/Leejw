@@ -1,0 +1,16 @@
+{
+  "nl": [
+    "generic_tags",
+    "generic_theme",
+    "generic_dark",
+    "generic_light",
+    "generic_report_bugs",
+    "generic_accessibility",
+    "generic_info",
+    "action_reload_lessons",
+    "action_open_locale_settings",
+    "settings_toggle_mode",
+    "settings_change_locale",
+    "snackbar_locale_definement"
+  ]
+}

@@ -163,6 +163,78 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Create new lesson'**
   String get voced_create_lesson;
+
+  /// No description provided for @generic_tags.
+  ///
+  /// In en, this message translates to:
+  /// **'Tags'**
+  String get generic_tags;
+
+  /// No description provided for @generic_theme.
+  ///
+  /// In en, this message translates to:
+  /// **'Theme'**
+  String get generic_theme;
+
+  /// No description provided for @generic_dark.
+  ///
+  /// In en, this message translates to:
+  /// **'Dark'**
+  String get generic_dark;
+
+  /// No description provided for @generic_light.
+  ///
+  /// In en, this message translates to:
+  /// **'Light'**
+  String get generic_light;
+
+  /// No description provided for @generic_report_bugs.
+  ///
+  /// In en, this message translates to:
+  /// **'Report Bugs'**
+  String get generic_report_bugs;
+
+  /// No description provided for @generic_accessibility.
+  ///
+  /// In en, this message translates to:
+  /// **'Accessibility'**
+  String get generic_accessibility;
+
+  /// No description provided for @generic_info.
+  ///
+  /// In en, this message translates to:
+  /// **'Info'**
+  String get generic_info;
+
+  /// No description provided for @action_reload_lessons.
+  ///
+  /// In en, this message translates to:
+  /// **'Reload Lessons'**
+  String get action_reload_lessons;
+
+  /// No description provided for @action_open_locale_settings.
+  ///
+  /// In en, this message translates to:
+  /// **'Open settings'**
+  String get action_open_locale_settings;
+
+  /// No description provided for @settings_toggle_mode.
+  ///
+  /// In en, this message translates to:
+  /// **'Change to {mode} mode'**
+  String settings_toggle_mode(String mode);
+
+  /// No description provided for @settings_change_locale.
+  ///
+  /// In en, this message translates to:
+  /// **'Change Locale'**
+  String get settings_change_locale;
+
+  /// No description provided for @snackbar_locale_definement.
+  ///
+  /// In en, this message translates to:
+  /// **'Locales are currently defined by your device settings!'**
+  String get snackbar_locale_definement;
 }
 
 class _AppLocalizationsDelegate

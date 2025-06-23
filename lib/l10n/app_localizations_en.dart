@@ -40,4 +40,43 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get voced_create_lesson => 'Create new lesson';
+
+  @override
+  String get generic_tags => 'Tags';
+
+  @override
+  String get generic_theme => 'Theme';
+
+  @override
+  String get generic_dark => 'Dark';
+
+  @override
+  String get generic_light => 'Light';
+
+  @override
+  String get generic_report_bugs => 'Report Bugs';
+
+  @override
+  String get generic_accessibility => 'Accessibility';
+
+  @override
+  String get generic_info => 'Info';
+
+  @override
+  String get action_reload_lessons => 'Reload Lessons';
+
+  @override
+  String get action_open_locale_settings => 'Open settings';
+
+  @override
+  String settings_toggle_mode(String mode) {
+    return 'Change to $mode mode';
+  }
+
+  @override
+  String get settings_change_locale => 'Change Locale';
+
+  @override
+  String get snackbar_locale_definement =>
+      'Locales are currently defined by your device settings!';
 }

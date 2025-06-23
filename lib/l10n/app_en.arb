@@ -1,4 +1,6 @@
 {
+  "@@locale": "en",
+  "@@author": "ItsTiazzz",
   "dashboard_title": "Dashboard",
   "dashboard_goto": "Go to Dashboard",
   "flashcards_title": "Flashcards",
@@ -9,5 +11,25 @@
   "settings_goto": "Go to Settings",
   "voced_title": "VocEd",
   "voced_goto": "Go to the VocEd",
-  "voced_create_lesson": "Create new lesson"
+  "voced_create_lesson": "Create new lesson",
+  "generic_tags": "Tags",
+  "generic_theme": "Theme",
+  "generic_dark": "Dark",
+  "generic_light": "Light",
+  "generic_report_bugs": "Report Bugs",
+  "generic_accessibility": "Accessibility",
+  "generic_info": "Info",
+  "action_reload_lessons": "Reload Lessons",
+  "action_open_locale_settings": "Open settings",
+  "settings_toggle_mode": "Change to {mode} mode",
+  "@settings_toggle_mode": {
+    "placeholders": {
+      "mode": {
+        "type": "String",
+        "example": "Dark"
+      }
+    }
+  },
+  "settings_change_locale": "Change Locale",
+  "snackbar_locale_definement": "Locales are currently defined by your device settings!"
 }

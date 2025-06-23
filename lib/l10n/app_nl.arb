@@ -1,4 +1,6 @@
 {
+  "@@locale": "nl",
+  "@@author": "ItsTiazzz",
   "dashboard_title": "Overzicht",
   "dashboard_goto": "Ga naar het Overzicht",
   "flashcards_title": "Flitskaartjes",

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:leejw/l10n/app_localizations.dart';
 import 'package:leejw/main.dart';
 import 'package:provider/provider.dart';
 
@@ -7,14 +8,15 @@ class Dashboard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var l10n = AppLocalizations.of(context)!;
+
     return Center(
       child: Column(
         children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
+          Wrap(
             children: [
-              DashboardEntry(text: "Your progress:", icon: Icon(Icons.flash_on_outlined), onPressed: (gState) => gState.setSelectedIndex(1),),
-              DashboardEntry(text: "Settings:", icon: Icon(Icons.settings_suggest_outlined), onPressed: (gState) => gState.setSelectedIndex(2),),
+              DashboardEntry(text: l10n.lessons_goto, icon: Icon(Icons.collections_bookmark_outlined), onPressed: (gState) => gState.setSelectedIndex(1),),
+              DashboardEntry(text: l10n.settings_goto, icon: Icon(Icons.settings_suggest_outlined), onPressed: (gState) => gState.setSelectedIndex(2),),
             ],
           )
         ],
@@ -41,7 +43,8 @@ class DashboardEntry extends StatelessWidget {
     var theme = Theme.of(context);
 
     return Card(
-      elevation: 8,
+      elevation: 20,
+      color: theme.cardColor.withAlpha(100),
       child: Padding(
       padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -49,10 +52,9 @@ class DashboardEntry extends StatelessWidget {
           children: [
             Text(
               text,
-              style: theme.textTheme.displaySmall,
+              style: theme.textTheme.titleLarge,
             ),
-            SizedBox(height: 10,),
-            IconButton(
+            IconButton.filled(
               onPressed: () => onPressed(gState),
               icon: icon,
             ),

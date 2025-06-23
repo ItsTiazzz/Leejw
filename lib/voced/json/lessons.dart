@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:leejw/l10n/app_localizations.dart';
 import 'package:leejw/voced/json/json.dart';
 import 'package:leejw/voced/voced.dart';
 
@@ -36,6 +37,7 @@ class _LessonCardState extends State<LessonCard> {
   @override
   Widget build(BuildContext context) {
     var theme = Theme.of(context);
+    var l10n = AppLocalizations.of(context)!;
 
     return AnimatedOpacity(
       opacity: opacity,
@@ -50,7 +52,7 @@ class _LessonCardState extends State<LessonCard> {
             children: [
               Text(widget.lesson.metaData.title, style: theme.textTheme.titleLarge,),
               SizedBox(height: 2,),
-              Text('${widget.lesson.metaData.description}; Tags:', style: theme.textTheme.labelSmall,),
+              Text('${widget.lesson.metaData.description}; ${l10n.generic_tags}:', style: theme.textTheme.labelSmall,),
               Wrap(
                 children: [
                   for (var tag in widget.lesson.metaData.tags)
