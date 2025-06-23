@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:leejw/l10n/app_localizations.dart';
 import 'package:leejw/main.dart';
 import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 class SettingsPage extends StatelessWidget {
   const SettingsPage({super.key});
@@ -21,6 +23,8 @@ class SettingsPage extends StatelessWidget {
         ),
         SettingTitleCard(title: l10n.generic_accessibility, icon: Icon(Icons.accessibility_new_outlined),),
         LocaleSettingCard(),
+        SettingTitleCard(title: l10n.generic_info, icon: Icon(Icons.info_outlined)),
+        ExternalLinkSettingCard(title: l10n.generic_report_bugs, uri: Uri.parse('https://github.com/ItsTiazzz/Leejw/issues'))
       ],
     );
   }
@@ -96,13 +100,36 @@ class LocaleSettingCard extends StatelessWidget {
               action: SnackBarAction(
                 label: l10n.action_open_locale_settings,
                 onPressed: () {
-                  throw UnimplementedError('We currently don\'t support switching to your settings.');
+                  launchUrlString('app-settings:');
                 },
               ),
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
               behavior: SnackBarBehavior.floating,
             )
           );
+        },
+      ),
+    );
+  }
+}
+
+class ExternalLinkSettingCard extends StatelessWidget {
+  final String title;
+  final Uri uri;
+  const ExternalLinkSettingCard({super.key, required this.title, required this.uri});
+
+  @override
+  Widget build(BuildContext context) {
+    var l10n = AppLocalizations.of(context)!;
+
+    return Card(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(20))),
+      child: ListTile(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(20))),
+        leading: Icon(Icons.link_outlined),
+        title: Text(l10n.generic_report_bugs),
+        onTap: () {
+          launchUrl(uri);
         },
       ),
     );
