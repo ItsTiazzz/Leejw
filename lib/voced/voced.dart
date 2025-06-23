@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -22,7 +23,7 @@ class VocEdState with ChangeNotifier {
     await vocedDir.create(recursive: true);
     await lessonsDir.create(recursive: true);
 
-    print('Initialised ${lessonsDir.path}');
+    log('Initialised ${lessonsDir.path}', time: DateTime.now(), name: 'Leejw|VocEd',);
 
     await for (var entity in lessonsDir.list(recursive: true, followLinks: false)) {
       if (entity is Directory) {
@@ -51,7 +52,7 @@ class VocEdState with ChangeNotifier {
       }
     }
 
-    print('Lessons: ${lessons.length}');
+    log('Lessons: ${lessons.length}', time: DateTime.now(), name: 'Leejw|VocEd',);
 
     notifyListeners();
   }
