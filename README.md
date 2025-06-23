@@ -29,7 +29,7 @@ The core of Leejw of course lies in the versatile Flashcards system. It displays
 
 These boxes will be ticked as I go on to finish this concept.  
 
-![leejw_flashcards_concept.png](./leejw_flashcards_concept.png)
+![leejw_flashcards_concept.png](./concept/flashcards_concept.png)
 
 ### Donkey bridge
 
@@ -39,13 +39,13 @@ Similarly to Flashcard's hint/useful info button, users make these themselves an
 
 The donkey bridge is also partly a design choice. As I was already on the topic of Dutch terms and animals, why not make it the theme of the app?
 
-[Concept "art" pending]
+![donkey_bridge_concept.png](./concepts/donkey_bridge_concept.png)
 
 ### Vocabulary Editor (VocEd)
 
 The VocEd can be used to make new words for your vocabulary. You can make sets of words, called "lessons," and you can then in turn put those sets in Flocks.
 
-[Concept "art" pending]
+![voced_interface_concept.png](./concepts/voced_interface_concept.png)
 
 ### Flocks and lessons
 
@@ -53,4 +53,4 @@ A lesson is a group of words from a vocabulary that are related to each other. T
 
 A flock is a group of lessons, for instance, all the lessons from a singular languages (even though language based lesson collections will be made automatically). Or all the lessons from a real life book or study method.
 
-[Concept "art" pending]
+![lessons_concept.png](./concepts/lessons_concept.png)
