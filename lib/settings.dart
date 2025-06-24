@@ -8,6 +8,7 @@ import 'package:leejw/main.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:url_launcher/url_launcher_string.dart';
+import 'package:logging/logging.dart';
 
 class SettingsPage extends StatelessWidget {
   const SettingsPage({super.key});
@@ -107,9 +108,9 @@ class LocaleSettingCard extends StatelessWidget {
                   try {
                     if (Platform.isIOS) launchUrlString("prefs:root=General&path=INTERNATIONAL/DEVICE_LANGUAGE");
                     else if (Platform.isWindows) launchUrlString("ms-settings:keyboard");
-                    else AppSettings.openAppSettings(type: AppSettingsType.appLocale);
+                    else AppSettings.openAppSettings(type: AppSettingsType.generalSettings);
                   } catch(e) {
-                    log('We currently can\'t open settings for ${Platform.operatingSystem}.', level: 2, name: 'Leejw|Settings');
+                    log('We currently can\'t open settings for ${Platform.operatingSystem} in any way.', level: Level.SEVERE.value, name: 'Leejw|Settings', error: e);
                   }
                 },
               ),

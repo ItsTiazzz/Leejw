@@ -23,7 +23,7 @@ class VocEdState with ChangeNotifier {
     await vocedDir.create(recursive: true);
     await lessonsDir.create(recursive: true);
 
-    log('Initialised ${lessonsDir.path}', time: DateTime.now(), name: 'Leejw|VocEd',);
+    log('Initialised ${lessonsDir.path}', time: DateTime.now(), name: 'Leejw|VocEd', level: Level.INFO.value,);
 
     await for (var entity in lessonsDir.list(recursive: true, followLinks: false)) {
       if (entity is Directory) {
@@ -52,7 +52,7 @@ class VocEdState with ChangeNotifier {
       }
     }
 
-    log('Lessons: ${lessons.length}', time: DateTime.now(), name: 'Leejw|VocEd',);
+    log('Lessons: ${lessons.length}', time: DateTime.now(), name: 'Leejw|VocEd', level: Level.INFO.value,);
 
     notifyListeners();
   }
