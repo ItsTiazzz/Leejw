@@ -95,12 +95,18 @@ class _HomePageState extends State<HomePage> {
       builder: (context, constraints) {
         return Scaffold(
           appBar: AppBar(
-            title: Row(
-              children: [
-                Icon(Icons.animation_outlined),
-                SizedBox(width: 5,),
-                Text('Leejw'),
-              ],
+            title: TapRegion(
+              onTapInside: (event) {
+                gState.setSelectedIndex(0);
+                Feedback.forTap(context);
+              },
+              child: Row(
+                children: [
+                  Icon(Icons.category_outlined),
+                  SizedBox(width: 5,),
+                  Text('Leejw'),
+                ],
+              ),
             ),
             actions: [],
           ),
