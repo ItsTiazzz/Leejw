@@ -1,5 +1,7 @@
+import 'dart:developer';
 import 'dart:io';
 
+import 'package:app_settings/app_settings.dart';
 import 'package:flutter/material.dart';
 import 'package:leejw/l10n/app_localizations.dart';
 import 'package:leejw/main.dart';
@@ -102,9 +104,13 @@ class LocaleSettingCard extends StatelessWidget {
               action: SnackBarAction(
                 label: l10n.action_open_locale_settings,
                 onPressed: () {
-                  if (Platform.isIOS) launchUrlString("app-settings:");
-                  else if (Platform.isWindows) launchUrlString("ms-settings:");
-                  else throw UnimplementedError('We currently can\'t open settings for Platform ${Platform.operatingSystem}.');
+                  try {
+                    if (Platform.isIOS) launchUrlString("prefs:root=General&path=INTERNATIONAL/DEVICE_LANGUAGE");
+                    else if (Platform.isWindows) launchUrlString("ms-settings:keyboard");
+                    else AppSettings.openAppSettings(type: AppSettingsType.appLocale);
+                  } catch(e) {
+                    log('We currently can\'t open settings for ${Platform.operatingSystem}.', level: 2, name: 'Leejw|Settings');
+                  }
                 },
               ),
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
