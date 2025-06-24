@@ -3,13 +3,12 @@ import 'dart:developer';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:json_annotation/json_annotation.dart';
 import 'package:leejw/l10n/app_localizations.dart';
 import 'package:leejw/voced/json/json.dart';
+import 'package:leejw/voced/lesson_page.dart';
+import 'package:logging/logging.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
-
-part 'voced.g.dart';
 
 class VocEdState with ChangeNotifier {
   final List<Lesson> lessons = <Lesson>[];
@@ -28,7 +27,7 @@ class VocEdState with ChangeNotifier {
     await for (var entity in lessonsDir.list(recursive: true, followLinks: false)) {
       if (entity is Directory) {
         LessonMetaData? metaData;
-        List<VocEdEntry> vocEntries = <VocEdEntry>[];
+        List<VocDataBundle> vocEntries = <VocDataBundle>[];
 
         await for (var nestEntity in entity.list(followLinks: false)) {
 
@@ -42,7 +41,7 @@ class VocEdState with ChangeNotifier {
             if (basename(file.path) == 'metadata.json') {
               metaData = LessonMetaData.fromJson(jsonDecode(content));
             } else {
-              final vocEntry = VocEdEntry.fromJson(jsonDecode(content));
+              final vocEntry = VocDataBundle.fromJson(jsonDecode(content));
               vocEntries.add(vocEntry);
             }
           }
@@ -79,26 +78,9 @@ class VocEditorPage extends StatelessWidget {
   }
 }
 
-@JsonSerializable(explicitToJson: true,)
-class VocEdEntry {
-  final VocMetaData metadata;
-  @JsonKey(name: "voc_data")
-  final VocWord vocWord;
-  
-  VocEdEntry(this.metadata, this.vocWord);
-
-  factory VocEdEntry.fromJson(Map<String, dynamic> json) => _$VocEdEntryFromJson(json);
-  Map<String, dynamic> toJson() => _$VocEdEntryToJson(this);
-
-  @override
-  String toString() {
-    return toJson().toString();
-  }
-}
-
-class VocEdEntryCard extends StatelessWidget {
-  final VocEdEntry entry;
-  const VocEdEntryCard({super.key, required this.entry});
+class VocDataBundleCard extends StatelessWidget {
+  final VocDataBundle entry;
+  const VocDataBundleCard({super.key, required this.entry});
 
   @override
   Widget build(BuildContext context) {
@@ -115,7 +97,7 @@ class VocEdEntryCard extends StatelessWidget {
           children: [
             Text(entry.metadata.word, style: theme.textTheme.headlineMedium,),
             SizedBox(height: 10,),
-            for (var translation in entry.vocWord.translations)
+            for (var translation in entry.vocData.translations)
               Expanded(
                 child: Row(
                   children: [
