@@ -3,7 +3,7 @@ import 'package:leejw/dashboard.dart';
 import 'package:leejw/voced/lesson_page.dart';
 import 'package:leejw/l10n/app_localizations.dart';
 import 'package:leejw/settings.dart';
-import 'package:leejw/voced/voced.dart';
+import 'package:leejw/voced/voced_page.dart';
 import 'package:provider/provider.dart';
 
 void main() {
@@ -108,7 +108,6 @@ class _HomePageState extends State<HomePage> {
                 ],
               ),
             ),
-            actions: [],
           ),
           body: Column(
             children: [

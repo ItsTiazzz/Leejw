@@ -1,7 +1,13 @@
+import 'dart:convert';
+import 'dart:developer';
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:leejw/l10n/app_localizations.dart';
 import 'package:leejw/voced/json/json.dart';
-import 'package:leejw/voced/voced.dart';
+import 'package:leejw/voced/voced_page.dart';
+import 'package:logging/logging.dart';
 import 'package:provider/provider.dart';
 
 var initialised = false;
@@ -30,8 +36,18 @@ class LessonPage extends StatelessWidget {
         Expanded(
           child: ListView(
             children: [
-              for (var lsn in vocState.lessons)
-                LessonCard(lesson: lsn),
+              for (var lesson in vocState.lessons)
+                TapRegion(
+                  onTapInside: (event) {
+                    Navigator.push<Widget>(context, 
+                      PageRouteBuilder(pageBuilder: (context, animation, secondaryAnimation) {
+                        return LessonInsightWidget(lesson);
+                      },)
+                    );
+                    Feedback.forTap(context);
+                  },
+                  child: LessonCard(lesson: lesson)
+                ),
             ],
           ),
         ),
@@ -40,11 +56,210 @@ class LessonPage extends StatelessWidget {
   }
 }
 
+class LessonInsightWidget extends StatefulWidget {
+  final Lesson lesson;
+  const LessonInsightWidget(this.lesson, {super.key,});
+
+  @override
+  State<LessonInsightWidget> createState() => _LessonInsightWidgetState();
+}
+
+class _LessonInsightWidgetState extends State<LessonInsightWidget> {
+  Lesson? lesson;
+
+  @override
+  Widget build(BuildContext context) {
+    setState(() {
+      lesson = widget.lesson;
+    });
+
+    return Scaffold(
+      appBar: AppBar(
+        title: Row(
+          children: [
+            Icon(Icons.collections_bookmark_outlined),
+            SizedBox(width: 5,),
+            Text(lesson!.metaData.title),
+          ],
+        ),
+        actions: [
+          IconButton(
+            onPressed: () => showDialog(context: context,
+              builder: (context) {
+                return Dialog(
+                  child: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: LessonEditForm(lesson!, (newValue) => setState(() => lesson = newValue)),
+                  ),
+                );
+              },
+            ),
+            icon: Icon(Icons.edit_note_outlined),
+          ),
+          IconButton(
+            onPressed: () => showAdaptiveDialog(context: context,
+              builder: (context) {
+                return AlertDialog.adaptive(
+                  actions: [
+                    ElevatedButton.icon(
+                      onPressed: () {
+                        widget.lesson.delete();
+                        Navigator.pop(context);
+                        Navigator.pop(context);
+                        Provider.of<VocEdState>(context, listen: false).loadLessons();
+                      },
+                      label: Text("Delete forever"),
+                      icon: Icon(Icons.delete_forever_outlined),
+                    )
+                  ],
+                  title: Text('Are you sure you want to delete this lesson?'),
+                  icon: Icon(Icons.warning_amber_outlined),
+                  actionsAlignment: MainAxisAlignment.center,
+                );
+              },
+            ),
+            icon: Icon(Icons.delete_outlined),
+          ),
+        ],
+      ),
+      body: Expanded(
+        child: Container(
+          color: Theme.of(context).colorScheme.primaryContainer,
+          child: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                for (var vocEntry in lesson!.vocEntries)
+                  Chip(label: Text(vocEntry.metadata.word))
+              ],
+            ),
+          ),
+        )
+      ),
+    );
+  }
+}
+
+class LessonEditForm extends StatefulWidget {
+  final Lesson lesson;
+  final Function(Lesson newValue) onLessonChanged;
+
+  const LessonEditForm(this.lesson, this.onLessonChanged, {super.key});
+
+  @override
+  State<LessonEditForm> createState() => _LessonEditFormState();
+}
+
+class _LessonEditFormState extends State<LessonEditForm> {
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
+  @override
+  Widget build(BuildContext context) {
+    String title = widget.lesson.metaData.title;
+    String description = widget.lesson.metaData.description;
+    List<LessonTag> tags = widget.lesson.metaData.tags;
+
+    return Form(
+      key: _formKey,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          TextFormField(
+            maxLength: 24,
+            maxLengthEnforcement: MaxLengthEnforcement.enforced,
+            // initialValue: widget.lesson.metaData.title,
+            initialValue: title,
+            decoration: InputDecoration(
+              border: OutlineInputBorder(),
+              labelText: 'Title',
+            ),
+            validator: (String? value) {
+              if (value == null || value.isEmpty) {
+                return 'This field is required!';
+              }
+              return null;
+            },
+            onSaved: (newValue) => title = newValue!,
+          ),
+          SizedBox(height: 12,),
+          TextFormField(
+            maxLength: 64,
+            maxLengthEnforcement: MaxLengthEnforcement.enforced,
+            maxLines: 2,
+            // initialValue: widget.lesson.metaData.description,
+            initialValue: description,
+            decoration: InputDecoration(
+              border: OutlineInputBorder(),
+              labelText: 'Description',
+            ),
+            validator: (String? value) {
+              if (value == null || value.isEmpty) {
+                return 'This field is required!';
+              }
+              return null;
+            },
+            onSaved: (newValue) => description = newValue!,
+          ),
+          // TODO: Edit tags.
+          // FormField(builder: (field) {
+          //   return 
+          // },),
+          SizedBox(height: 8,),
+          FilledButton.icon(
+            onPressed: () {
+              if (_formKey.currentState!.validate()) {
+                _formKey.currentState!.save();
+                widget.lesson.metaData = LessonMetaData(title, description, tags);
+                widget.lesson.write();
+                Navigator.pop(context);
+                Provider.of<VocEdState>(context, listen: false).loadLessons();
+                widget.onLessonChanged(widget.lesson);
+                log('Lesson edited: ${widget.lesson}', name: 'Leejw|Lesson Editor', level: Level.INFO.value);
+              }
+            },
+            label: const Text('Confirm'),
+            icon: Icon(Icons.edit_outlined),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
 class Lesson {
-  final LessonMetaData metaData;
+  final Directory directory;
+  LessonMetaData metaData;
   final List<VocDataBundle> vocEntries;
 
-  Lesson(this.metaData, this.vocEntries);
+  Lesson(this.directory, this.metaData, this.vocEntries);
+
+  void delete() async {
+    await directory.delete(recursive: true);
+  }
+
+  void write() async {
+    // Write metadata.json
+    var metaDataFile = File('${directory.path}/metadata.json');
+    await  metaDataFile.create();
+    var sink = metaDataFile.openWrite();
+    sink.write(jsonEncode(metaData.toJson()));
+    await sink.close();
+
+    // Write voc entry jsons
+    for (var vocEntry in vocEntries) {
+      var file = File('${directory.path}/${vocEntry.metadata.identifier}.json');
+      await file.create();
+
+      var sink = file.openWrite();
+      sink.write(jsonEncode(vocEntry.toJson()));
+      await sink.close();
+    }
+  }
+
+  @override
+  String toString() {
+    return '{${metaData.toJson()},$vocEntries}';
+  }
 }
 
 class LessonCard extends StatefulWidget {
@@ -98,17 +313,15 @@ class _LessonCardState extends State<LessonCard> {
                 ],
               ),
               SizedBox(height: 10,),
-              for (var i = 0; i < 2; i++)
-                Card(
-                  color: theme.cardColor.withValues(),
-                  child: Wrap(
-                    children: [
-                      for (var vce in widget.lesson.vocEntries)
-                        for (var translation in vce.vocData.translations)
-                          Text('${translation.translation} ', overflow: TextOverflow.fade,),
-                    ],
-                  ),
+              Card(
+                child: Wrap(
+                  children: [
+                    for (var vce in widget.lesson.vocEntries)
+                      for (var translation in vce.vocData.translations)
+                        Text('${translation.translation} ', overflow: TextOverflow.fade,),
+                  ],
                 ),
+              ),
             ],
           )
         ),

@@ -13,8 +13,7 @@ import 'package:path_provider/path_provider.dart';
 class VocEdState with ChangeNotifier {
   final List<Lesson> lessons = <Lesson>[];
 
-  void loadLessons() async {
-    lessons.clear();
+  Future<List<Lesson>> loadLessons() async {
     Directory? appDir = await getApplicationSupportDirectory();
     final Directory vocedDir = Directory('${appDir.path}/voced');
     final Directory lessonsDir = Directory('${appDir.path}/voced/lessons');
@@ -24,7 +23,8 @@ class VocEdState with ChangeNotifier {
 
     log('Initialised ${lessonsDir.path}', time: DateTime.now(), name: 'Leejw|VocEd', level: Level.INFO.value,);
 
-    await for (var entity in lessonsDir.list(recursive: true, followLinks: false)) {
+    lessons.clear();
+    await for (var entity in lessonsDir.list(followLinks: false)) {
       if (entity is Directory) {
         LessonMetaData? metaData;
         List<VocDataBundle> vocEntries = <VocDataBundle>[];
@@ -47,13 +47,14 @@ class VocEdState with ChangeNotifier {
           }
         }
 
-        lessons.add(Lesson(metaData!, vocEntries));
-      }
+        lessons.add(Lesson(entity, metaData!, vocEntries));
+      } else await entity.delete();
     }
 
     log('Lessons: ${lessons.length}', time: DateTime.now(), name: 'Leejw|VocEd', level: Level.INFO.value,);
 
     notifyListeners();
+    return Future<List<Lesson>>(() => lessons,);
   }
 }
 

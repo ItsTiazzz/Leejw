@@ -15,6 +15,11 @@ class VocDataBundle {
 
   factory VocDataBundle.fromJson(Map<String, dynamic> json) => _$VocDataBundleFromJson(json);
   Map<String, dynamic> toJson() => _$VocDataBundleToJson(this);
+
+  @override
+  String toString() {
+    return '${toJson()}';
+  }
 }
 
 @JsonSerializable(explicitToJson: true)
