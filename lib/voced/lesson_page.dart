@@ -9,6 +9,7 @@ import 'package:leejw/voced/json/json.dart';
 import 'package:leejw/voced/voced_page.dart';
 import 'package:logging/logging.dart';
 import 'package:provider/provider.dart';
+import 'package:tag_form_field/tag_field.dart';
 
 var initialised = false;
 
@@ -152,12 +153,21 @@ class LessonEditForm extends StatefulWidget {
 
 class _LessonEditFormState extends State<LessonEditForm> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  TextEditingController? _titleClr;
+  TextEditingController? _descriptionClr;
+
+  @override
+  void dispose() {
+    _titleClr?.dispose();
+    _descriptionClr?.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
-    String title = widget.lesson.metaData.title;
-    String description = widget.lesson.metaData.description;
-    List<LessonTag> tags = widget.lesson.metaData.tags;
+    List<String> tags = widget.lesson.metaData.tags;
+    _titleClr = TextEditingController.fromValue(TextEditingValue(text: widget.lesson.metaData.title));
+    _descriptionClr = TextEditingController.fromValue(TextEditingValue(text: widget.lesson.metaData.description));
 
     return Form(
       key: _formKey,
@@ -165,10 +175,9 @@ class _LessonEditFormState extends State<LessonEditForm> {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           TextFormField(
+            controller: _titleClr,
             maxLength: 24,
             maxLengthEnforcement: MaxLengthEnforcement.enforced,
-            // initialValue: widget.lesson.metaData.title,
-            initialValue: title,
             decoration: InputDecoration(
               border: OutlineInputBorder(),
               labelText: 'Title',
@@ -179,15 +188,13 @@ class _LessonEditFormState extends State<LessonEditForm> {
               }
               return null;
             },
-            onSaved: (newValue) => title = newValue!,
           ),
           SizedBox(height: 12,),
           TextFormField(
+            controller: _descriptionClr,
             maxLength: 64,
             maxLengthEnforcement: MaxLengthEnforcement.enforced,
             maxLines: 2,
-            // initialValue: widget.lesson.metaData.description,
-            initialValue: description,
             decoration: InputDecoration(
               border: OutlineInputBorder(),
               labelText: 'Description',
@@ -198,18 +205,21 @@ class _LessonEditFormState extends State<LessonEditForm> {
               }
               return null;
             },
-            onSaved: (newValue) => description = newValue!,
           ),
-          // TODO: Edit tags.
-          // FormField(builder: (field) {
-          //   return 
-          // },),
+          TagFormField(
+            decoration: InputDecoration(
+              border: OutlineInputBorder(),
+              labelText: 'Tags',
+              hintText: 'Separate tags using commas',
+            ),
+            onValueChanged: (value) => setState(() => tags = value,),
+          ),
           SizedBox(height: 8,),
           FilledButton.icon(
             onPressed: () {
               if (_formKey.currentState!.validate()) {
                 _formKey.currentState!.save();
-                widget.lesson.metaData = LessonMetaData(title, description, tags);
+                widget.lesson.metaData = LessonMetaData(_titleClr!.text, _descriptionClr!.text, tags);
                 widget.lesson.write();
                 Navigator.pop(context);
                 Provider.of<VocEdState>(context, listen: false).loadLessons();
@@ -307,7 +317,7 @@ class _LessonCardState extends State<LessonCard> {
                     Card(
                       child: Padding(
                         padding: const EdgeInsets.all(4.0),
-                        child: Text(tag.name, style: theme.textTheme.labelSmall,),
+                        child: Text(tag, style: theme.textTheme.labelSmall,),
                       ),
                     ),
                 ],
