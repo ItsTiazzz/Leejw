@@ -29,7 +29,7 @@ The core of Leejw of course lies in the versatile Flashcards system. It displays
 
 These boxes will be ticked as I go on to finish this concept.  
 
-![leejw_flashcards_concept.png](./concept/flashcards_concept.png)
+![leejw_flashcards_concept.png](./concepts/flashcards_concept.png)
 
 ### Donkey bridge
 
