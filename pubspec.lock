@@ -610,14 +610,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.4.1"
-  tag_form_field:
-    dependency: "direct main"
-    description:
-      name: tag_form_field
-      sha256: "9695594998184592a9c521393b83da8ff5716092f20ad83181c4956691984dae"
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.0.2"
   term_glyph:
     dependency: transitive
     description:

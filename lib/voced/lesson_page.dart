@@ -5,11 +5,11 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:leejw/l10n/app_localizations.dart';
+import 'package:leejw/tag_form_field/tag_field.dart';
 import 'package:leejw/voced/json/json.dart';
 import 'package:leejw/voced/voced_page.dart';
 import 'package:logging/logging.dart';
 import 'package:provider/provider.dart';
-import 'package:tag_form_field/tag_field.dart';
 
 var initialised = false;
 
@@ -207,12 +207,13 @@ class _LessonEditFormState extends State<LessonEditForm> {
             },
           ),
           TagFormField(
+            initialTags: tags,
             decoration: InputDecoration(
               border: OutlineInputBorder(),
               labelText: 'Tags',
               hintText: 'Separate tags using commas',
             ),
-            onValueChanged: (value) => setState(() => tags = value,),
+            onValueChanged: (value) => tags = value,
           ),
           SizedBox(height: 8,),
           FilledButton.icon(
