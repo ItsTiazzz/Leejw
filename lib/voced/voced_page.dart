@@ -12,9 +12,28 @@ class VocEditorPage extends StatelessWidget {
     return Column(
       children: [
         ElevatedButton.icon(
+          icon: Icon(Icons.add_card_outlined),
+          onPressed: () {
+            // Navigator.push<Widget>(context,
+            //   PageRouteBuilder(
+            //     pageBuilder: (context, animation, secondaryAnimation) {
+                  
+            //     },
+            //   ),
+            // );
+          },
+          label: Text(l10n.voced_create_vocdata)
+        ),
+        ElevatedButton.icon(
           icon: Icon(Icons.note_add_outlined),
           onPressed: () {
-            
+            // Navigator.push<Widget>(context,
+            //   PageRouteBuilder(
+            //     pageBuilder: (context, animation, secondaryAnimation) {
+
+            //     },
+            //   ),
+            // );
           },
           label: Text(l10n.voced_create_lesson)
         ),
@@ -23,9 +42,9 @@ class VocEditorPage extends StatelessWidget {
   }
 }
 
-class VocDataBundleCard extends StatelessWidget {
-  final VocDataBundle entry;
-  const VocDataBundleCard({super.key, required this.entry});
+class VocDataHolderCard extends StatelessWidget {
+  final VocDataHolder entry;
+  const VocDataHolderCard({super.key, required this.entry});
 
   @override
   Widget build(BuildContext context) {
