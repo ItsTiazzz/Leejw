@@ -1,62 +1,6 @@
-import 'dart:convert';
-import 'dart:developer';
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:leejw/l10n/app_localizations.dart';
 import 'package:leejw/voced/json/json.dart';
-import 'package:leejw/voced/lesson_page.dart';
-import 'package:logging/logging.dart';
-import 'package:path/path.dart';
-import 'package:path_provider/path_provider.dart';
-
-class VocEdState with ChangeNotifier {
-  final List<Lesson> lessons = <Lesson>[];
-
-  Future<List<Lesson>> loadLessons() async {
-    Directory? appDir = await getApplicationSupportDirectory();
-    final Directory vocedDir = Directory('${appDir.path}/voced');
-    final Directory lessonsDir = Directory('${appDir.path}/voced/lessons');
-
-    await vocedDir.create(recursive: true);
-    await lessonsDir.create(recursive: true);
-
-    log('Initialised ${lessonsDir.path}', time: DateTime.now(), name: 'Leejw|VocEd', level: Level.INFO.value,);
-
-    lessons.clear();
-    await for (var entity in lessonsDir.list(followLinks: false)) {
-      if (entity is Directory) {
-        LessonMetaData? metaData;
-        List<VocDataBundle> vocEntries = <VocDataBundle>[];
-
-        await for (var nestEntity in entity.list(followLinks: false)) {
-
-          if (nestEntity is File) {
-            File file = nestEntity;
-
-            if (!basename(file.path).contains('json')) continue;
-
-            String content = await file.readAsString();
-
-            if (basename(file.path) == 'metadata.json') {
-              metaData = LessonMetaData.fromJson(jsonDecode(content));
-            } else {
-              final vocEntry = VocDataBundle.fromJson(jsonDecode(content));
-              vocEntries.add(vocEntry);
-            }
-          }
-        }
-
-        lessons.add(Lesson(entity, metaData!, vocEntries));
-      } else await entity.delete();
-    }
-
-    log('Lessons: ${lessons.length}', time: DateTime.now(), name: 'Leejw|VocEd', level: Level.INFO.value,);
-
-    notifyListeners();
-    return Future<List<Lesson>>(() => lessons,);
-  }
-}
 
 class VocEditorPage extends StatelessWidget {
   const VocEditorPage({super.key});
