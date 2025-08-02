@@ -11,6 +11,7 @@
   "settings_goto": "Go to Settings",
   "voced_title": "VocEd",
   "voced_goto": "Go to the VocEd",
+  "voced_create_vocdata": "Create new voc data",
   "voced_create_lesson": "Create new lesson",
   "generic_tags": "Tags",
   "generic_theme": "Theme",

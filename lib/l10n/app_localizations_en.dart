@@ -39,6 +39,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get voced_goto => 'Go to the VocEd';
 
   @override
+  String get voced_create_vocdata => 'Create new voc data';
+
+  @override
   String get voced_create_lesson => 'Create new lesson';
 
   @override

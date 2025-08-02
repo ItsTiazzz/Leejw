@@ -158,6 +158,12 @@ abstract class AppLocalizations {
   /// **'Go to the VocEd'**
   String get voced_goto;
 
+  /// No description provided for @voced_create_vocdata.
+  ///
+  /// In en, this message translates to:
+  /// **'Create new voc data'**
+  String get voced_create_vocdata;
+
   /// No description provided for @voced_create_lesson.
   ///
   /// In en, this message translates to:

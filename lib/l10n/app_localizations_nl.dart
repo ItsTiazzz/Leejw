@@ -39,6 +39,9 @@ class AppLocalizationsNl extends AppLocalizations {
   String get voced_goto => 'Ga naar de VocEd';
 
   @override
+  String get voced_create_vocdata => 'Create new voc data';
+
+  @override
   String get voced_create_lesson => 'Maak nieuwe les';
 
   @override
