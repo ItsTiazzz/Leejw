@@ -6,17 +6,33 @@ part of 'voc_data.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-VocDataBundle _$VocDataBundleFromJson(Map<String, dynamic> json) =>
-    VocDataBundle(
+VocDataHolder _$VocDataHolderFromJson(Map<String, dynamic> json) =>
+    VocDataHolder(
       VocMetaData.fromJson(json['metadata'] as Map<String, dynamic>),
       VocData.fromJson(json['voc_data'] as Map<String, dynamic>),
     );
 
-Map<String, dynamic> _$VocDataBundleToJson(VocDataBundle instance) =>
+Map<String, dynamic> _$VocDataHolderToJson(VocDataHolder instance) =>
     <String, dynamic>{
       'metadata': instance.metadata.toJson(),
       'voc_data': instance.vocData.toJson(),
     };
+
+VocMetaData _$VocMetaDataFromJson(Map<String, dynamic> json) => VocMetaData(
+  json['word'] as String,
+  json['identifier'] as String,
+  const LocaleJsonConverter().fromJson(json['origin_locale'] as String),
+  const DateTimeJsonConverter().fromJson(json['modified'] as String),
+);
+
+Map<String, dynamic> _$VocMetaDataToJson(
+  VocMetaData instance,
+) => <String, dynamic>{
+  'word': instance.word,
+  'identifier': instance.identifier,
+  'origin_locale': const LocaleJsonConverter().toJson(instance.originLocale),
+  'modified': const DateTimeJsonConverter().toJson(instance.modified),
+};
 
 VocData _$VocDataFromJson(Map<String, dynamic> json) => VocData(
   (json['additions'] as List<dynamic>?)

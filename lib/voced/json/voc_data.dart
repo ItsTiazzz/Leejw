@@ -5,21 +5,37 @@ import 'json.dart';
 
 part 'voc_data.g.dart';
 
-@JsonSerializable(explicitToJson: true,)
-class VocDataBundle {
+@JsonSerializable(explicitToJson: true)
+class VocDataHolder {
   final VocMetaData metadata;
   @JsonKey(name: "voc_data")
   final VocData vocData;
   
-  VocDataBundle(this.metadata, this.vocData);
+  VocDataHolder(this.metadata, this.vocData);
 
-  factory VocDataBundle.fromJson(Map<String, dynamic> json) => _$VocDataBundleFromJson(json);
-  Map<String, dynamic> toJson() => _$VocDataBundleToJson(this);
+  factory VocDataHolder.fromJson(Map<String, dynamic> json) => _$VocDataHolderFromJson(json);
+  Map<String, dynamic> toJson() => _$VocDataHolderToJson(this);
 
   @override
   String toString() {
     return '${toJson()}';
   }
+}
+
+@JsonSerializable(explicitToJson: true)
+class VocMetaData {
+  final String word;
+  final String identifier;
+  @LocaleJsonConverter()
+  @JsonKey(name: 'origin_locale')
+  final Locale originLocale;
+  @DateTimeJsonConverter()
+  final DateTime modified;
+
+  VocMetaData(this.word, this.identifier, this.originLocale, this.modified,);
+
+  factory VocMetaData.fromJson(Map<String, dynamic> json) => _$VocMetaDataFromJson(json);
+  Map<String, dynamic> toJson() => _$VocMetaDataToJson(this);
 }
 
 @JsonSerializable(explicitToJson: true)
@@ -70,6 +86,7 @@ class Meaning {
   @LocaleJsonConverter()
   final Locale locale;
   final String meaning;
+
   Meaning(this.locale, this.meaning);
 
   factory Meaning.fromJson(Map<String, dynamic> json) => _$MeaningFromJson(json);
