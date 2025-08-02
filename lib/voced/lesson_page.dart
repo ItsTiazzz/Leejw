@@ -4,10 +4,11 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:leejw/form_fields/src/list_form_field.dart';
 import 'package:leejw/l10n/app_localizations.dart';
-import 'package:leejw/tag_form_field/tag_field.dart';
+import 'package:leejw/form_fields/form_fields.dart';
 import 'package:leejw/voced/json/json.dart';
-import 'package:leejw/voced/voced_page.dart';
+import 'package:leejw/voced/voced.dart';
 import 'package:logging/logging.dart';
 import 'package:provider/provider.dart';
 
@@ -22,7 +23,7 @@ class LessonPage extends StatelessWidget {
     var l10n = AppLocalizations.of(context)!;
 
     if (!initialised) {
-      vocState.loadLessons();
+      vocState.load();
       
       initialised = true;
     }
@@ -30,14 +31,14 @@ class LessonPage extends StatelessWidget {
     return Column(
       children: [
         ElevatedButton.icon(
-          onPressed: () => vocState.loadLessons(),
+          onPressed: () => vocState.load(),
           label: Text(l10n.action_reload_lessons),
           icon: Icon(Icons.loop),
         ),
         Expanded(
           child: ListView(
             children: [
-              for (var lesson in vocState.lessons)
+              for (var lesson in vocState.getLessons())
                 TapRegion(
                   onTapInside: (event) {
                     Navigator.push<Widget>(context, 
@@ -107,7 +108,7 @@ class _LessonInsightWidgetState extends State<LessonInsightWidget> {
                         widget.lesson.delete();
                         Navigator.pop(context);
                         Navigator.pop(context);
-                        Provider.of<VocEdState>(context, listen: false).loadLessons();
+                        Provider.of<VocEdState>(context, listen: false).load();
                       },
                       label: Text("Delete forever"),
                       icon: Icon(Icons.delete_forever_outlined),
@@ -130,7 +131,7 @@ class _LessonInsightWidgetState extends State<LessonInsightWidget> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                for (var vocEntry in lesson!.vocEntries)
+                for (var vocEntry in lesson!.getEntries(context))
                   Chip(label: Text(vocEntry.metadata.word))
               ],
             ),
@@ -166,6 +167,7 @@ class _LessonEditFormState extends State<LessonEditForm> {
   @override
   Widget build(BuildContext context) {
     List<String> tags = widget.lesson.metaData.tags;
+    List<String> vocEntries = widget.lesson.metaData.vocHolderIdentifiers;
     _titleClr = TextEditingController.fromValue(TextEditingValue(text: widget.lesson.metaData.title));
     _descriptionClr = TextEditingController.fromValue(TextEditingValue(text: widget.lesson.metaData.description));
 
@@ -216,14 +218,25 @@ class _LessonEditFormState extends State<LessonEditForm> {
             onValueChanged: (value) => tags = value,
           ),
           SizedBox(height: 8,),
+          ListFormField(
+            initialList: vocEntries,
+            decoration: InputDecoration(
+              border: OutlineInputBorder(),
+              labelText: 'Entries',
+              hintText: 'Separate vocabulary words using commas, insert their id',
+            ),
+            onValueChanged: (value) => vocEntries = value,
+            validate: (value) => value.contains("o"),
+          ),
+          SizedBox(height: 8,),
           FilledButton.icon(
             onPressed: () {
               if (_formKey.currentState!.validate()) {
                 _formKey.currentState!.save();
-                widget.lesson.metaData = LessonMetaData(_titleClr!.text, _descriptionClr!.text, tags);
+                widget.lesson.metaData = LessonMetaData(_titleClr!.text, _descriptionClr!.text, tags, vocEntries);
                 widget.lesson.write();
                 Navigator.pop(context);
-                Provider.of<VocEdState>(context, listen: false).loadLessons();
+                Provider.of<VocEdState>(context, listen: false).load();
                 widget.onLessonChanged(widget.lesson);
                 log('Lesson edited: ${widget.lesson}', name: 'Leejw|Lesson Editor', level: Level.INFO.value);
               }
@@ -238,38 +251,41 @@ class _LessonEditFormState extends State<LessonEditForm> {
 }
 
 class Lesson {
-  final Directory directory;
+  final File file;
   LessonMetaData metaData;
-  final List<VocDataBundle> vocEntries;
 
-  Lesson(this.directory, this.metaData, this.vocEntries);
+  Lesson(this.file, this.metaData);
 
   void delete() async {
-    await directory.delete(recursive: true);
+    await file.delete(recursive: true);
   }
 
   void write() async {
     // Write metadata.json
-    var metaDataFile = File('${directory.path}/metadata.json');
-    await  metaDataFile.create();
-    var sink = metaDataFile.openWrite();
+    await  file.create();
+    var sink = file.openWrite();
     sink.write(jsonEncode(metaData.toJson()));
     await sink.close();
+  }
 
-    // Write voc entry jsons
-    for (var vocEntry in vocEntries) {
-      var file = File('${directory.path}/${vocEntry.metadata.identifier}.json');
-      await file.create();
+  List<VocDataHolder> getEntries(BuildContext context) {
+    var vocState = Provider.of<VocEdState>(context);
+    List<VocDataHolder> list = [];
 
-      var sink = file.openWrite();
-      sink.write(jsonEncode(vocEntry.toJson()));
-      await sink.close();
+    for (var id in metaData.vocHolderIdentifiers) {
+      VocDataHolder? holder = vocState.getVocHolder(id);
+      if (holder != null) {
+        list.add(holder);
+      } else {
+        log('Tried to find Voc Holder with id $id but returned incorrect type $holder.', time: DateTime.now(), name: 'Leejw|VocEd', level: Level.WARNING.value,);
+      }
     }
+    return list;
   }
 
   @override
   String toString() {
-    return '{${metaData.toJson()},$vocEntries}';
+    return '{${metaData.toJson()}}';
   }
 }
 
@@ -327,7 +343,7 @@ class _LessonCardState extends State<LessonCard> {
               Card(
                 child: Wrap(
                   children: [
-                    for (var vce in widget.lesson.vocEntries)
+                    for (var vce in widget.lesson.getEntries(context))
                       for (var translation in vce.vocData.translations)
                         Text('${translation.translation} ', overflow: TextOverflow.fade,),
                   ],

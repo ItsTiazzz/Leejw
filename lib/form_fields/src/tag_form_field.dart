@@ -1,5 +1,3 @@
-import 'package:flutter/material.dart';
-
 // Adapted from Anuchit Chalothorn's tag_form_field library from pub.dev:
 //
 // Copyright (c) 2024 Anuchit Chalothorn
@@ -23,6 +21,8 @@ import 'package:flutter/material.dart';
 // SOFTWARE.
 //
 // Code in this file follows OUR license which should be included with the package.
+
+import 'package:flutter/material.dart';
 
 /// A form field widget for inputting and displaying tags.
 ///
@@ -150,8 +150,7 @@ class _TagFormFieldState extends State<TagFormField> {
       child: Chip(
         label: Text(label),
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        shape:
-            RoundedRectangleBorder(borderRadius: BorderRadius.circular(32.0)),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(32.0)),
         deleteIcon: const Icon(Icons.remove_circle),
         onDeleted: () => _removeTag(index),
       ),
