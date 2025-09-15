@@ -6,9 +6,9 @@ Tywrap Studios Protected Art License 2.0
     The entity "You/The User" refers to any person obtaining a copy or substantial part of this software and/or
         anyone contributing to the software.
     "Code" includes (BUT IS NOT LIMITED TO) all source files located in java/, kotlin/,
-        generated/data/ or resources/data/, as well as lib/, web/*.html.
+        generated/data/ or resources/data/, as well as lib/, l10n.yaml.
     "Art" includes (BUT IS NOT LIMITED TO) all (source) files located in generated/assets/, 
-        resources/assets/ or docs/assets/, as well as icons/ web/favicon.ico.
+        resources/assets/ or docs/assets/, as well as icons/, resources/, Assets.xcassets/, leejw_*.png, concepts/.
     Parts of the license encapsuled by "/** **/" or "<>" are meant to assist people who use the license to
         write and edit the license for their needs. If any of these texts reference "you," it refers to the 
         person writing/editing the license.
