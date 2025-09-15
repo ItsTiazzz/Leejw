@@ -105,9 +105,7 @@ class _TagFormFieldState extends State<TagFormField> {
 
   /// Removes a tag at the specified index.
   void _removeTag(int index) {
-    setState(() {
-      _tags.removeAt(index);
-    });
+    setState(() => _tags.removeAt(index));
     widget.onValueChanged?.call(_tags);
   }
 
