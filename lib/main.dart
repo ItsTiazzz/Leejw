@@ -5,10 +5,23 @@ import 'package:leejw/l10n/app_localizations.dart';
 import 'package:leejw/settings.dart';
 import 'package:leejw/voced/voced.dart';
 import 'package:leejw/voced/voced_page.dart';
+import 'package:logger/logger.dart';
 import 'package:provider/provider.dart';
+
+Logger logger = Logger(printer: PrettyPrinter(
+  dateTimeFormat: DateTimeFormat.onlyTimeAndSinceStart,
+  printEmojis: false,
+  noBoxingByDefault: true,
+  excludeBox: {
+    Level.warning: false,
+    Level.error: false,
+    Level.fatal: false
+  },
+));
 
 void main() {
   runApp(const LeejwApp());
+  logger.t('Started LeejwApp. Thanks for using Leejw! Learn like a lion hunts.');
 }
 
 class LeejwApp extends StatelessWidget {

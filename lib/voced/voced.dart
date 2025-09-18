@@ -4,15 +4,14 @@ import 'package:flutter/material.dart';
 import 'package:leejw/voced/json/lessons.dart';
 import 'package:leejw/voced/json/voc_data.dart';
 import 'package:leejw/voced/lesson_page.dart';
-import 'package:logging/logging.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 import 'dart:convert';
-import 'dart:developer';
 import 'dart:io';
 
 import '../form_fields/form_fields.dart';
+import '../main.dart';
 
 var initialised = false;
 
@@ -30,7 +29,7 @@ class VocEdState with ChangeNotifier {
     await lessonsDir.create(recursive: true);
     await vocDataDir.create(recursive: true);
 
-    log('Initialised ${lessonsDir.path} and ${vocDataDir.path}', time: DateTime.now(), name: 'Leejw|VocEd', level: Level.INFO.value,);
+    logger.i('Initialised ${lessonsDir.path} and ${vocDataDir.path}');
 
     _lessons.clear();
     await for (var entity in lessonsDir.list(followLinks: false)) {
@@ -43,7 +42,7 @@ class VocEdState with ChangeNotifier {
       } else await entity.delete(recursive: true);
     }
 
-    log('Lessons: ${_lessons.length}', time: DateTime.now(), name: 'Leejw|VocEd', level: Level.INFO.value,);
+    logger.i('Lessons: ${_lessons.length}');
 
     _vocHolders.clear();
     await for (var entity in vocDataDir.list(followLinks: false)) {
@@ -56,7 +55,7 @@ class VocEdState with ChangeNotifier {
       } else await entity.delete(recursive: true);
     }
 
-    log('Voc Data Holders: ${_vocHolders.length}', time: DateTime.now(), name: 'Leejw|VocEd', level: Level.INFO.value,);
+    logger.i('Voc Data Holders: ${_vocHolders.length}');
 
     notifyListeners();
     return Future<Map<String, List<dynamic>>>(() {
@@ -191,6 +190,7 @@ class _VocDataHolderEditFormState extends State<VocDataHolderEditForm> {
                 Navigator.pop(context);
                 Provider.of<VocEdState>(context, listen: false).load();
                 widget.onSubmit(widget.holder!);
+                logger.i('Holder edited: ${widget.holder}');
               }
             },
             label: const Text('Confirm'),

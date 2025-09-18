@@ -5,6 +5,7 @@ import 'package:app_settings/app_settings.dart';
 import 'package:flutter/material.dart';
 import 'package:leejw/l10n/app_localizations.dart';
 import 'package:leejw/main.dart';
+import 'package:logger/logger.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:url_launcher/url_launcher_string.dart';
@@ -110,7 +111,7 @@ class LocaleSettingCard extends StatelessWidget {
                     else if (Platform.isWindows) launchUrlString("ms-settings:keyboard");
                     else AppSettings.openAppSettings(type: AppSettingsType.generalSettings);
                   } catch(e) {
-                    log('We currently can\'t open settings for ${Platform.operatingSystem} in any way.', level: Level.SEVERE.value, name: 'Leejw|Settings', error: e);
+                    logger.f('We currently can\'t open settings for ${Platform.operatingSystem} in any way.', error: e);
                   }
                 },
               ),

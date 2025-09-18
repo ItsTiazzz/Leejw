@@ -11,7 +11,7 @@ import 'package:leejw/voced/voced.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 
-var initialised = false;
+import '../main.dart';
 
 class LessonPage extends StatelessWidget {
   const LessonPage({super.key});
@@ -245,9 +245,8 @@ class _LessonEditFormState extends State<LessonEditForm> {
                 widget.lesson!.write();
                 Navigator.pop(context);
                 Provider.of<VocEdState>(context, listen: false).load();
-                widget.onLessonChanged(widget.lesson);
-                log('Lesson edited: ${widget.lesson}', name: 'Leejw|Lesson Editor', level: Level.INFO.value);
                 widget.onSubmit(widget.lesson!);
+                logger.i('Lesson edited: ${widget.lesson}');
               }
             },
             label: const Text('Confirm'),
@@ -289,7 +288,7 @@ class Lesson {
       if (holder != null) {
         list.add(holder);
       } else {
-        log('Tried to find Voc Holder with id $id but returned incorrect type $holder.', time: DateTime.now(), name: 'Leejw|VocEd', level: Level.WARNING.value,);
+        logger.w('Tried to find Voc Holder with id $id but returned incorrect type $holder.');
       }
     }
     return list;
