@@ -111,26 +111,6 @@ class _VocHolderCardState extends State<VocHolderCard> {
   Widget build(BuildContext context) {
     var theme = Theme.of(context);
 
-    return Card(
-      elevation: 10,
-      color: Theme.of(context).cardColor.withAlpha(180),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadiusGeometry.all(Radius.circular(30))),
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Column(
-          children: [
-            Text(entry.metadata.word, style: theme.textTheme.headlineMedium,),
-            SizedBox(height: 10,),
-            for (var translation in entry.vocData.translations)
-              Expanded(
-                child: Row(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.all(1.5),
-                      child: CircleAvatar(radius: 14, child: Icon(Icons.language_outlined)),
-                    ),
-                    Text(translation.translation),
-                  ],
     return AnimatedOpacity(
       opacity: opacity,
       duration: const Duration(milliseconds: 200),
