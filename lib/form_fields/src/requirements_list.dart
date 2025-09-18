@@ -91,7 +91,11 @@ class _RequirementsFormFieldState extends State<RequirementsFormField> {
     final newRequirements = value
         .split(',')
         .map((e) => Requirement(e.trim(), null))
-        .where((requirement) => requirement.value.isNotEmpty && !_requirements.contains(requirement))
+        .where(
+          (requirement) =>
+              requirement.value.isNotEmpty &&
+              !_requirements.contains(requirement),
+        )
         .toList();
 
     if (newRequirements.isNotEmpty) {
@@ -103,8 +107,12 @@ class _RequirementsFormFieldState extends State<RequirementsFormField> {
     }
   }
 
+  /// Adds a single requirement to the list.
+  /// This method is used internally to add initial requirements but
+  /// can technically also be used if needed elsewhere.
   _addRequirement(Requirement requirement) {
-
+    setState(() => _requirements.add(requirement));
+    // widget.onValueChanged?.call(_requirements); // Gone because flutter doesn't like this during init
   }
 
   /// Removes a requirement at the specified index.
@@ -132,7 +140,7 @@ class _RequirementsFormFieldState extends State<RequirementsFormField> {
         ),
         const SizedBox(height: 8.0),
         if (_requirements.isNotEmpty)
-          Wrap(
+          Column(
             children: _requirements
                 .asMap()
                 .entries
@@ -153,17 +161,19 @@ class _RequirementsFormFieldState extends State<RequirementsFormField> {
         label: Row(
           children: [
             Text(requirement.value),
-            Checkbox(
-              value: requirement.required ?? true,
-              onChanged: (value) {
-                setState(() => requirement.required = value);
-                print('change $value');
-              },
-            )
+            // FUCK this shit bro I am so FUCKING done with this shit I'm gonna FUCKING kill a Google intern
+            // Checkbox(
+            //   value: requirement.required,
+            //   onChanged: (value) {
+            //     setState(() => requirement.required = value ?? true);
+            //   },
+            // )
           ],
         ),
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(32.0)),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(32.0),
+        ),
         deleteIcon: const Icon(Icons.remove_circle),
         onDeleted: () => _removeRequirement(index),
       ),

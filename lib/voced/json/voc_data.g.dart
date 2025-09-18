@@ -6,15 +6,15 @@ part of 'voc_data.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-VocDataHolder _$VocDataHolderFromJson(Map<String, dynamic> json) =>
-    VocDataHolder(
+VocDataHolderJson _$VocDataHolderJsonFromJson(Map<String, dynamic> json) =>
+    VocDataHolderJson(
       VocMetaData.fromJson(json['metadata'] as Map<String, dynamic>),
       VocData.fromJson(json['voc_data'] as Map<String, dynamic>),
     );
 
-Map<String, dynamic> _$VocDataHolderToJson(VocDataHolder instance) =>
+Map<String, dynamic> _$VocDataHolderJsonToJson(VocDataHolderJson instance) =>
     <String, dynamic>{
-      'metadata': instance.metadata.toJson(),
+      'metadata': instance.metaData.toJson(),
       'voc_data': instance.vocData.toJson(),
     };
 
@@ -22,7 +22,6 @@ VocMetaData _$VocMetaDataFromJson(Map<String, dynamic> json) => VocMetaData(
   json['word'] as String,
   json['identifier'] as String,
   const LocaleJsonConverter().fromJson(json['origin_locale'] as String),
-  const DateTimeJsonConverter().fromJson(json['modified'] as String),
 );
 
 Map<String, dynamic> _$VocMetaDataToJson(
@@ -31,7 +30,6 @@ Map<String, dynamic> _$VocMetaDataToJson(
   'word': instance.word,
   'identifier': instance.identifier,
   'origin_locale': const LocaleJsonConverter().toJson(instance.originLocale),
-  'modified': const DateTimeJsonConverter().toJson(instance.modified),
 };
 
 VocData _$VocDataFromJson(Map<String, dynamic> json) => VocData(
@@ -66,20 +64,24 @@ Map<String, dynamic> _$AdditionToJson(Addition instance) => <String, dynamic>{
 Translation _$TranslationFromJson(Map<String, dynamic> json) => Translation(
   const LocaleJsonConverter().fromJson(json['locale'] as String),
   json['translation'] as String,
+  (json['group'] as num?)?.toInt() ?? -1,
 );
 
 Map<String, dynamic> _$TranslationToJson(Translation instance) =>
     <String, dynamic>{
       'locale': const LocaleJsonConverter().toJson(instance.locale),
       'translation': instance.translation,
+      'group': instance.group,
     };
 
 Meaning _$MeaningFromJson(Map<String, dynamic> json) => Meaning(
   const LocaleJsonConverter().fromJson(json['locale'] as String),
   json['meaning'] as String,
+  (json['group'] as num?)?.toInt() ?? -1,
 );
 
 Map<String, dynamic> _$MeaningToJson(Meaning instance) => <String, dynamic>{
   'locale': const LocaleJsonConverter().toJson(instance.locale),
   'meaning': instance.meaning,
+  'group': instance.group,
 };

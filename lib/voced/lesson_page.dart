@@ -4,12 +4,11 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:leejw/form_fields/src/list_form_field.dart';
 import 'package:leejw/l10n/app_localizations.dart';
 import 'package:leejw/form_fields/form_fields.dart';
 import 'package:leejw/voced/json/json.dart';
 import 'package:leejw/voced/voced.dart';
-import 'package:logging/logging.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 
 var initialised = false;
@@ -30,28 +29,32 @@ class LessonPage extends StatelessWidget {
 
     return Column(
       children: [
+        SizedBox(height: 4,),
         ElevatedButton.icon(
           onPressed: () => vocState.load(),
           label: Text(l10n.action_reload_lessons),
           icon: Icon(Icons.loop),
         ),
         Expanded(
-          child: ListView(
-            children: [
-              for (var lesson in vocState.getLessons())
-                TapRegion(
-                  onTapInside: (event) {
-                    Navigator.push<Widget>(context, 
-                      PageRouteBuilder(pageBuilder: (context, animation, secondaryAnimation) {
-                        return LessonInsightWidget(lesson);
-                      },)
-                    );
-                    Feedback.forTap(context);
-                  },
-                  child: LessonCard(lesson: lesson)
-                ),
-            ],
-          ),
+          child: ListView.builder(
+            itemBuilder: (context, index) {
+              return TapRegion(
+                onTapInside: (event) {
+                  Navigator.push(
+                    context,
+                    PageRouteBuilder(
+                      pageBuilder: (context, animation, secondaryAnimation) {
+                        return LessonInsightWidget(vocState.getLessons()[index]);
+                      },
+                    )
+                  );
+                  Feedback.forTap(context);
+                },
+                child: LessonCard(lesson: vocState.getLessons()[index])
+              );
+            },
+            itemCount: vocState.getLessons().length,
+          )
         ),
       ],
     );
@@ -132,7 +135,7 @@ class _LessonInsightWidgetState extends State<LessonInsightWidget> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 for (var vocEntry in lesson!.getEntries(context))
-                  Chip(label: Text(vocEntry.metadata.word))
+                  Chip(label: Text(vocEntry.information.metaData.word))
               ],
             ),
           ),
@@ -142,11 +145,12 @@ class _LessonInsightWidgetState extends State<LessonInsightWidget> {
   }
 }
 
+// ignore: must_be_immutable
 class LessonEditForm extends StatefulWidget {
-  final Lesson lesson;
-  final Function(Lesson newValue) onLessonChanged;
+  Lesson? lesson;
+  final Function(Lesson newValue) onSubmit;
 
-  const LessonEditForm(this.lesson, this.onLessonChanged, {super.key});
+  LessonEditForm(this.lesson, this.onSubmit, {super.key});
 
   @override
   State<LessonEditForm> createState() => _LessonEditFormState();
@@ -166,10 +170,11 @@ class _LessonEditFormState extends State<LessonEditForm> {
 
   @override
   Widget build(BuildContext context) {
-    List<String> tags = widget.lesson.metaData.tags;
-    List<String> vocEntries = widget.lesson.metaData.vocHolderIdentifiers;
-    _titleClr = TextEditingController.fromValue(TextEditingValue(text: widget.lesson.metaData.title));
-    _descriptionClr = TextEditingController.fromValue(TextEditingValue(text: widget.lesson.metaData.description));
+    List<String> tags = widget.lesson?.metaData.tags ?? [];
+    List<String> vocEntries = widget.lesson?.metaData.vocHolderIdentifiers ?? [];
+    _titleClr = TextEditingController.fromValue(TextEditingValue(text: widget.lesson?.metaData.title ?? ''));
+    _descriptionClr = TextEditingController.fromValue(TextEditingValue(text: widget.lesson?.metaData.description ?? ''));
+    var vocState = Provider.of<VocEdState>(context, listen: false);
 
     return Form(
       key: _formKey,
@@ -226,19 +231,23 @@ class _LessonEditFormState extends State<LessonEditForm> {
               hintText: 'Separate vocabulary words using commas, insert their id',
             ),
             onValueChanged: (value) => vocEntries = value,
-            validate: (value) => value.contains("o"),
+            validate: (value) => vocState.getVocHolder(value) != null,
           ),
           SizedBox(height: 8,),
           FilledButton.icon(
             onPressed: () {
               if (_formKey.currentState!.validate()) {
+                if (widget.lesson == null) {
+                  widget.lesson = Lesson(File(''), LessonMetaData(_titleClr!.text, _descriptionClr!.text, tags, vocEntries));
+                }
                 _formKey.currentState!.save();
-                widget.lesson.metaData = LessonMetaData(_titleClr!.text, _descriptionClr!.text, tags, vocEntries);
-                widget.lesson.write();
+                widget.lesson!.metaData = LessonMetaData(_titleClr!.text, _descriptionClr!.text, tags, vocEntries);
+                widget.lesson!.write();
                 Navigator.pop(context);
                 Provider.of<VocEdState>(context, listen: false).load();
                 widget.onLessonChanged(widget.lesson);
                 log('Lesson edited: ${widget.lesson}', name: 'Leejw|Lesson Editor', level: Level.INFO.value);
+                widget.onSubmit(widget.lesson!);
               }
             },
             label: const Text('Confirm'),
@@ -251,7 +260,7 @@ class _LessonEditFormState extends State<LessonEditForm> {
 }
 
 class Lesson {
-  final File file;
+  File file;
   LessonMetaData metaData;
 
   Lesson(this.file, this.metaData);
@@ -261,11 +270,14 @@ class Lesson {
   }
 
   void write() async {
-    // Write metadata.json
-    await  file.create();
-    var sink = file.openWrite();
+    // Write .meta.json
+    Directory appDir = await getApplicationSupportDirectory();
+    File newFile = File('${appDir.path}/voced/lessons/${metaData.title}.meta.json');
+    await newFile.create();
+    var sink = newFile.openWrite();
     sink.write(jsonEncode(metaData.toJson()));
     await sink.close();
+    file = newFile;
   }
 
   List<VocDataHolder> getEntries(BuildContext context) {
@@ -344,7 +356,7 @@ class _LessonCardState extends State<LessonCard> {
                 child: Wrap(
                   children: [
                     for (var vce in widget.lesson.getEntries(context))
-                      for (var translation in vce.vocData.translations)
+                      for (var translation in vce.information.vocData.translations)
                         Text('${translation.translation} ', overflow: TextOverflow.fade,),
                   ],
                 ),

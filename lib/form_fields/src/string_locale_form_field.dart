@@ -1,29 +1,33 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class StringWithLocaleFormField extends StatefulWidget {
   const StringWithLocaleFormField(
     this.initialValue,
-    this.onValueChanged,
-    {super.key}
-  );
+    this.onValueChanged, {
+    super.key,
+  });
 
   final StringWithLocale? initialValue;
   final ValueChanged<StringWithLocale>? onValueChanged;
 
   @override
-  State<StringWithLocaleFormField> createState() => StringWithLocaleFormFieldState();
+  State<StringWithLocaleFormField> createState() =>
+      StringWithLocaleFormFieldState();
 }
 
 class StringWithLocaleFormFieldState extends State<StringWithLocaleFormField> {
   StringWithLocale? _currentValue;
-  
+
   Widget _buildChip() {
     return Container(
       margin: const EdgeInsets.only(right: 4.0, top: 4.0, bottom: 4.0),
       child: Chip(
         label: Text(_currentValue?.value ?? 'Value'),
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(32.0)),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(32.0),
+        ),
         deleteIcon: Icon(Icons.edit),
         onDeleted: () => showDialog(
           context: context,
@@ -33,7 +37,7 @@ class StringWithLocaleFormFieldState extends State<StringWithLocaleFormField> {
                 padding: const EdgeInsets.all(16.0),
                 child: StringWithLocaleForm(
                   _currentValue,
-                  (newValue) => setState(()  {
+                  (newValue) => setState(() {
                     _currentValue = newValue;
                     widget.onValueChanged?.call(_currentValue!);
                   }),
@@ -48,7 +52,8 @@ class StringWithLocaleFormFieldState extends State<StringWithLocaleFormField> {
 
   @override
   Widget build(BuildContext context) {
-    if (widget.initialValue != null) setState(() => _currentValue = widget.initialValue);
+    if (widget.initialValue != null)
+      setState(() => _currentValue = widget.initialValue);
 
     return _buildChip();
   }
@@ -67,12 +72,13 @@ class StringWithLocaleListFormField extends StatefulWidget {
   final List<StringWithLocale>? initialValues;
   final ValueChanged<List<StringWithLocale>>? onValueChanged;
   final bool Function(StringWithLocale value) validate;
-  
+
   @override
   State<StatefulWidget> createState() => _StringWithLocaleListFormFieldState();
 }
 
-class _StringWithLocaleListFormFieldState extends State<StringWithLocaleListFormField> {
+class _StringWithLocaleListFormFieldState
+    extends State<StringWithLocaleListFormField> {
   /// The current list.
   final List<StringWithLocale> _entries = [];
 
@@ -108,22 +114,27 @@ class _StringWithLocaleListFormFieldState extends State<StringWithLocaleListForm
     return Container(
       margin: const EdgeInsets.only(right: 4.0, top: 4.0, bottom: 4.0),
       child: Chip(
-        label: TapRegion(
-          onTapInside: (event) => showDialog(
-            context: context,
-            builder: (context) {
-              return Dialog(
-                child: Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: StringWithLocaleForm(string, (newValue) {
-                    _replace(newValue, index);
-                    print('${newValue.value} | ${newValue.locale.toLanguageTag()}');
-                    string = newValue;
-                  }),
-                ),
-              );
-            },
-          ),
+        label: GestureDetector(
+          onLongPress: () {
+            HapticFeedback.vibrate();
+            showDialog(
+              context: context,
+              builder: (context) {
+                return Dialog(
+                  child: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: StringWithLocaleForm(string, (newValue) {
+                      _replace(newValue, index);
+                      print(
+                        '${newValue.value} | ${newValue.locale.toLanguageTag()}',
+                      );
+                      string = newValue;
+                    }),
+                  ),
+                );
+              },
+            );
+          },
           child: Text('${string.value} | ${string.locale.toLanguageTag()}'),
         ),
         backgroundColor: widget.validate(string)
@@ -199,7 +210,7 @@ class _StringWithLocaleListFormFieldState extends State<StringWithLocaleListForm
 
 // ignore: must_be_immutable
 class StringWithLocaleForm extends StatefulWidget {
-  StringWithLocaleForm(this.stringWithLocale, this.onSubmit, {super.key,});
+  StringWithLocaleForm(this.stringWithLocale, this.onSubmit, {super.key});
 
   StringWithLocale? stringWithLocale;
   final Function(StringWithLocale) onSubmit;
@@ -222,8 +233,14 @@ class _StringWithLocaleFormState extends State<StringWithLocaleForm> {
 
   @override
   Widget build(BuildContext context) {
-    _valueController = TextEditingController.fromValue(TextEditingValue(text: widget.stringWithLocale?.value ?? ''));
-    _localeController = TextEditingController.fromValue(TextEditingValue(text: widget.stringWithLocale?.locale.toLanguageTag() ?? ''));
+    _valueController = TextEditingController.fromValue(
+      TextEditingValue(text: widget.stringWithLocale?.value ?? ''),
+    );
+    _localeController = TextEditingController.fromValue(
+      TextEditingValue(
+        text: widget.stringWithLocale?.locale.toLanguageTag() ?? '',
+      ),
+    );
 
     return Form(
       key: _formKey,
@@ -243,7 +260,7 @@ class _StringWithLocaleFormState extends State<StringWithLocaleForm> {
               return null;
             },
           ),
-          SizedBox(height: 8,),
+          SizedBox(height: 8),
           TextFormField(
             controller: _localeController,
             decoration: const InputDecoration(
@@ -265,12 +282,16 @@ class _StringWithLocaleFormState extends State<StringWithLocaleForm> {
               return null;
             },
           ),
-          SizedBox(height: 8,),
+          SizedBox(height: 8),
           FilledButton.icon(
             onPressed: () {
               if (_formKey.currentState!.validate()) {
                 _formKey.currentState!.save();
-                widget.stringWithLocale = StringWithLocale(_valueController!.text, Locale(_localeController!.text));
+                widget.stringWithLocale = StringWithLocale(
+                  _valueController!.text,
+                  Locale(_localeController!.text),
+                  -1
+                );
                 Navigator.pop(context);
                 widget.onSubmit(widget.stringWithLocale!);
               }
@@ -279,7 +300,7 @@ class _StringWithLocaleFormState extends State<StringWithLocaleForm> {
             icon: Icon(Icons.edit_outlined),
           ),
         ],
-      )
+      ),
     );
   }
 }
@@ -287,6 +308,7 @@ class _StringWithLocaleFormState extends State<StringWithLocaleForm> {
 class StringWithLocale {
   String value;
   Locale locale;
+  int group;
 
-  StringWithLocale(this.value, this.locale);
+  StringWithLocale(this.value, this.locale, this.group);
 }
