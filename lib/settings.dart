@@ -1,4 +1,3 @@
-import 'dart:developer';
 import 'dart:io';
 
 import 'package:app_settings/app_settings.dart';
@@ -9,7 +8,10 @@ import 'package:logger/logger.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:url_launcher/url_launcher_string.dart';
-import 'package:logging/logging.dart';
+
+const titleShape = RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.elliptical(20, 30)));
+const shape = RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(20)));
+const snackBarShape = RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10)));
 
 class SettingsPage extends StatelessWidget {
   const SettingsPage({super.key});
@@ -23,14 +25,23 @@ class SettingsPage extends StatelessWidget {
       children: [
         SettingTitleCard(title: l10n.generic_theme, icon: Icon(Icons.format_paint_outlined),),
         SettingCard(
-          message: l10n.settings_toggle_mode(gState.isDarkMode() ? l10n.generic_light : l10n.generic_dark),
+          title: Text(l10n.settings_toggle_mode(gState.isDarkMode() ? l10n.generic_light : l10n.generic_dark)),
           icon: Icon(gState.isDarkMode() ? Icons.light_mode_outlined : Icons.dark_mode_outlined),
           onTap: () => gState.nextMode(),
         ),
         SettingTitleCard(title: l10n.generic_accessibility, icon: Icon(Icons.accessibility_new_outlined),),
         LocaleSettingCard(),
         SettingTitleCard(title: l10n.generic_info, icon: Icon(Icons.info_outlined)),
-        ExternalLinkSettingCard(title: l10n.generic_report_bugs, uri: Uri.parse('https://github.com/ItsTiazzz/Leejw/issues'))
+        ExternalLinkSettingCard(title: l10n.generic_report_bugs, uri: Uri.parse('https://github.com/ItsTiazzz/Leejw/issues')),
+        StatefulBuilder(
+            builder: (context, setState) => SettingCard(
+              title: Text('${DateTimeFormat.onlyTimeAndSinceStart(DateTime.now())}\nClick to refresh'),
+              icon: Icon(Icons.timer_outlined),
+              onTap: () => setState(() {
+                return;
+              },),
+            ),
+        ),
       ],
     );
   }
@@ -49,9 +60,9 @@ class SettingTitleCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.elliptical(20, 30))),
+      shape: titleShape,
       child: ListTile(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(20))),
+        shape: shape,
         leading: icon,
         title: Text(title, style: Theme.of(context).textTheme.headlineMedium,),
       ),
@@ -62,23 +73,23 @@ class SettingTitleCard extends StatelessWidget {
 class SettingCard extends StatelessWidget {
   const SettingCard({
     super.key,
-    required this.message,
+    required this.title,
     required this.onTap,
     required this.icon,
   });
 
-  final String message;
+  final Widget title;
   final Function() onTap;
   final Icon icon;
 
   @override
   Widget build(BuildContext context) {
     return Card(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(20))),
+      shape: shape,
       child: ListTile(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(20))),
+        shape: shape,
         leading: icon,
-        title: Text(message),
+        title: title,
         onTap: () => onTap(),
       ),
     );
@@ -93,9 +104,9 @@ class LocaleSettingCard extends StatelessWidget {
     var l10n = AppLocalizations.of(context)!;
 
     return Card(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(20))),
+      shape: shape,
       child: ListTile(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(20))),
+        shape: shape,
         leading: Icon(Icons.language_outlined),
         title: Text(l10n.settings_change_locale),
         onTap: () {
@@ -109,13 +120,14 @@ class LocaleSettingCard extends StatelessWidget {
                   try {
                     if (Platform.isIOS) launchUrlString("prefs:root=General&path=INTERNATIONAL/DEVICE_LANGUAGE");
                     else if (Platform.isWindows) launchUrlString("ms-settings:keyboard");
-                    else AppSettings.openAppSettings(type: AppSettingsType.generalSettings);
+                    else if (Platform.isAndroid) AppSettings.openAppSettings(type: AppSettingsType.generalSettings); // Best I can do
+                    else AppSettings.openAppSettings(type: AppSettingsType.settings); // Last resort only
                   } catch(e) {
                     logger.f('We currently can\'t open settings for ${Platform.operatingSystem} in any way.', error: e);
                   }
                 },
               ),
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
+              shape: snackBarShape,
               behavior: SnackBarBehavior.floating,
             )
           );
@@ -135,9 +147,9 @@ class ExternalLinkSettingCard extends StatelessWidget {
     var l10n = AppLocalizations.of(context)!;
 
     return Card(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(20))),
+      shape: shape,
       child: ListTile(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(20))),
+        shape: shape,
         leading: Icon(Icons.link_outlined),
         title: Text(l10n.generic_report_bugs),
         onTap: () {
