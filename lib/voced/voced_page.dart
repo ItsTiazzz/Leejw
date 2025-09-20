@@ -117,9 +117,7 @@ class _VocHolderCardState extends State<VocHolderCard> {
       child: Card(
         elevation: 20,
         color: theme.cardColor.withAlpha(100),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(30),
-        ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
         child: Padding(
           padding: const EdgeInsets.all(8.0),
           child: Row(

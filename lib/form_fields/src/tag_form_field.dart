@@ -148,7 +148,9 @@ class _TagFormFieldState extends State<TagFormField> {
       child: Chip(
         label: Text(label),
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(32.0)),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(32.0),
+        ),
         deleteIcon: const Icon(Icons.remove_circle),
         onDeleted: () => _removeTag(index),
       ),

@@ -1,4 +1,6 @@
 import 'dart:async';
+import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:leejw/voced/json/lessons.dart';
@@ -7,8 +9,6 @@ import 'package:leejw/voced/lesson_page.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
-import 'dart:convert';
-import 'dart:io';
 
 import '../form_fields/form_fields.dart';
 import '../main.dart';
@@ -33,13 +33,16 @@ class VocEdState with ChangeNotifier {
 
     _lessons.clear();
     await for (var entity in lessonsDir.list(followLinks: false)) {
-      if (entity is File) {        
+      if (entity is File) {
         if (basename(entity.path).endsWith(".meta.json")) {
           String content = await entity.readAsString();
-          LessonMetaData metaData = LessonMetaData.fromJson(jsonDecode(content));
+          LessonMetaData metaData = LessonMetaData.fromJson(
+            jsonDecode(content),
+          );
           _lessons.add(Lesson(entity, metaData));
         }
-      } else await entity.delete(recursive: true);
+      } else
+        await entity.delete(recursive: true);
     }
 
     logger.i('Lessons: ${_lessons.length}');
@@ -49,10 +52,14 @@ class VocEdState with ChangeNotifier {
       if (entity is File) {
         if (basename(entity.path).endsWith(".voc.json")) {
           String content = await entity.readAsString();
-          VocDataHolder holder = VocDataHolder(entity, VocDataHolderJson.fromJson(jsonDecode(content)));
+          VocDataHolder holder = VocDataHolder(
+            entity,
+            VocDataHolderJson.fromJson(jsonDecode(content)),
+          );
           _vocHolders.add(holder);
         }
-      } else await entity.delete(recursive: true);
+      } else
+        await entity.delete(recursive: true);
     }
 
     logger.i('Voc Data Holders: ${_vocHolders.length}');
@@ -91,7 +98,9 @@ class VocEdState with ChangeNotifier {
 
   VocDataHolder? getVocHolder(String id) {
     try {
-      return getVocHolders().singleWhere((element) => element.information.metaData.identifier == id,);
+      return getVocHolders().singleWhere(
+        (element) => element.information.metaData.identifier == id,
+      );
     } catch (e) {
       return null;
     }
@@ -112,7 +121,7 @@ class VocDataHolderEditForm extends StatefulWidget {
 class _VocDataHolderEditFormState extends State<VocDataHolderEditForm> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   StringWithLocale? string;
-  
+
   @override
   Widget build(BuildContext context) {
     List<StringWithLocale> meanings = [];
@@ -122,11 +131,23 @@ class _VocDataHolderEditFormState extends State<VocDataHolderEditForm> {
       string = StringWithLocale(
         widget.holder!.information.metaData.word,
         widget.holder!.information.metaData.originLocale,
-        -1
+        -1,
       );
-      meanings.addAll(widget.holder!.information.vocData.meanings.map((e) => StringWithLocale(e.meaning, e.locale, e.group),));
-      translations.addAll(widget.holder!.information.vocData.translations.map((e) => StringWithLocale(e.translation, e.locale, e.group),));
-      additions.addAll(widget.holder!.information.vocData.additions.map((e) => Requirement(e.addition, e.required),));
+      meanings.addAll(
+        widget.holder!.information.vocData.meanings.map(
+          (e) => StringWithLocale(e.meaning, e.locale, e.group),
+        ),
+      );
+      translations.addAll(
+        widget.holder!.information.vocData.translations.map(
+          (e) => StringWithLocale(e.translation, e.locale, e.group),
+        ),
+      );
+      additions.addAll(
+        widget.holder!.information.vocData.additions.map(
+          (e) => Requirement(e.addition, e.required),
+        ),
+      );
     }
 
     return Form(
@@ -138,27 +159,27 @@ class _VocDataHolderEditFormState extends State<VocDataHolderEditForm> {
             string,
             (value) => setState(() => string = value),
           ),
-          SizedBox(height: 8,),
+          SizedBox(height: 8),
           StringWithLocaleListFormField(
             label: Text('Meanings'),
             initialValues: meanings,
             onValueChanged: (value) => meanings = value,
             validate: (value) => value.value.isNotEmpty,
           ),
-          SizedBox(height: 8,),
+          SizedBox(height: 8),
           StringWithLocaleListFormField(
             label: Text('Translations'),
             initialValues: translations,
             onValueChanged: (value) => translations = value,
             validate: (value) => value.value.isNotEmpty,
           ),
-          SizedBox(height: 8,),
+          SizedBox(height: 8),
           RequirementsFormField(
             initialRequirements: additions,
             decoration: const InputDecoration(
               border: OutlineInputBorder(),
               labelText: 'Additions',
-              hintText: 'Seperate entries using commas'
+              hintText: 'Seperate entries using commas',
             ),
             onValueChanged: (value) => additions = value,
           ),
@@ -181,7 +202,8 @@ class _VocDataHolderEditFormState extends State<VocDataHolderEditForm> {
                       translations
                           .map((e) => Translation(e.locale, e.value, e.group))
                           .toList(),
-                      meanings.map((e) => Meaning(e.locale, e.value, e.group))
+                      meanings
+                          .map((e) => Meaning(e.locale, e.value, e.group))
                           .toList(),
                     ),
                   ),

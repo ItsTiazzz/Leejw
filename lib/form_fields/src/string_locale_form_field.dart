@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:leejw/main.dart';
 
 class StringWithLocaleFormField extends StatefulWidget {
   const StringWithLocaleFormField(
@@ -125,9 +126,7 @@ class _StringWithLocaleListFormFieldState
                     padding: const EdgeInsets.all(16.0),
                     child: StringWithLocaleForm(string, (newValue) {
                       _replace(newValue, index);
-                      print(
-                        '${newValue.value} | ${newValue.locale.toLanguageTag()}',
-                      );
+                      logger.t('${newValue.value} | ${newValue.locale.toLanguageTag()}');
                       string = newValue;
                     }),
                   ),
@@ -290,7 +289,7 @@ class _StringWithLocaleFormState extends State<StringWithLocaleForm> {
                 widget.stringWithLocale = StringWithLocale(
                   _valueController!.text,
                   Locale(_localeController!.text),
-                  -1
+                  -1,
                 );
                 Navigator.pop(context);
                 widget.onSubmit(widget.stringWithLocale!);

@@ -58,7 +58,7 @@ class ListFormField extends StatefulWidget {
 
   /// A check ran on every entry trying to be entered into the list.
   /// If `false` is returned, the entry wont enter the list.
-  /// 
+  ///
   /// The calling method always checks for empty and duplicate entries first,
   /// you don't need to implement that yourself.
   final bool Function(String value) validate;
@@ -159,26 +159,28 @@ class _ListFormFieldState extends State<ListFormField> {
       child: Dismissible(
         key: ValueKey<String>(_entries[index]),
         direction: DismissDirection.startToEnd,
-        background: Container(color: Colors.red,),
+        background: Container(color: Colors.red),
         onDismissed: (direction) => _removeEntry(index),
-        child: widget.validate(label) ? ListTile(
-          title: Text(
-            label,
-            style: Theme.of(context).textTheme.titleSmall,
-          ),
-          trailing: Text("Swipe to remove"),
-          dense: true,
-          tileColor: Theme.of(context).colorScheme.inversePrimary,
-        ) : ListTile(
-          title: Text(
-            label,
-            style: Theme.of(context).textTheme.titleSmall,
-          ),
-          leading: Icon(Icons.error_outline),
-          trailing: Text("Invalid! Swipe to remove"),
-          // dense: true,
-          tileColor: Theme.of(context).colorScheme.errorContainer,
-        ),
+        child: widget.validate(label)
+            ? ListTile(
+                title: Text(
+                  label,
+                  style: Theme.of(context).textTheme.titleSmall,
+                ),
+                trailing: Text("Swipe to remove"),
+                dense: true,
+                tileColor: Theme.of(context).colorScheme.inversePrimary,
+              )
+            : ListTile(
+                title: Text(
+                  label,
+                  style: Theme.of(context).textTheme.titleSmall,
+                ),
+                leading: Icon(Icons.error_outline),
+                trailing: Text("Invalid! Swipe to remove"),
+                // dense: true,
+                tileColor: Theme.of(context).colorScheme.errorContainer,
+              ),
       ),
     );
   }

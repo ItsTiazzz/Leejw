@@ -4,6 +4,7 @@ import 'dart:ui';
 
 import 'package:json_annotation/json_annotation.dart';
 import 'package:path_provider/path_provider.dart';
+
 import 'json.dart';
 
 part 'voc_data.g.dart';
@@ -21,7 +22,9 @@ class VocDataHolder {
   void write() async {
     // Write .voc.json
     Directory appDir = await getApplicationSupportDirectory();
-    File newFile = File('${appDir.path}/voced/voc/${information.metaData.identifier}.voc.json');
+    File newFile = File(
+      '${appDir.path}/voced/voc/${information.metaData.identifier}.voc.json',
+    );
     await newFile.create();
     var sink = newFile.openWrite();
     sink.write(jsonEncode(information.toJson()));
@@ -41,10 +44,11 @@ class VocDataHolderJson {
   final VocMetaData metaData;
   @JsonKey(name: "voc_data")
   final VocData vocData;
-  
+
   VocDataHolderJson(this.metaData, this.vocData);
 
-  factory VocDataHolderJson.fromJson(Map<String, dynamic> json) => _$VocDataHolderJsonFromJson(json);
+  factory VocDataHolderJson.fromJson(Map<String, dynamic> json) =>
+      _$VocDataHolderJsonFromJson(json);
   Map<String, dynamic> toJson() => _$VocDataHolderJsonToJson(this);
 
   @override
@@ -61,9 +65,10 @@ class VocMetaData {
   @JsonKey(name: 'origin_locale')
   final Locale originLocale;
 
-  VocMetaData(this.word, this.identifier, this.originLocale,);
+  VocMetaData(this.word, this.identifier, this.originLocale);
 
-  factory VocMetaData.fromJson(Map<String, dynamic> json) => _$VocMetaDataFromJson(json);
+  factory VocMetaData.fromJson(Map<String, dynamic> json) =>
+      _$VocMetaDataFromJson(json);
   Map<String, dynamic> toJson() => _$VocMetaDataToJson(this);
 }
 
@@ -78,7 +83,8 @@ class VocData {
 
   VocData(this.additions, this.translations, this.meanings);
 
-  factory VocData.fromJson(Map<String, dynamic> json) => _$VocDataFromJson(json);
+  factory VocData.fromJson(Map<String, dynamic> json) =>
+      _$VocDataFromJson(json);
   Map<String, dynamic> toJson() => _$VocDataToJson(this);
 }
 
@@ -90,7 +96,8 @@ class Addition {
 
   Addition(this.required, this.addition);
 
-  factory Addition.fromJson(Map<String, dynamic> json) => _$AdditionFromJson(json);
+  factory Addition.fromJson(Map<String, dynamic> json) =>
+      _$AdditionFromJson(json);
   Map<String, dynamic> toJson() => _$AdditionToJson(this);
 
   String getFormattedString() {
@@ -108,7 +115,8 @@ class Translation {
 
   Translation(this.locale, this.translation, this.group);
 
-  factory Translation.fromJson(Map<String, dynamic> json) => _$TranslationFromJson(json);
+  factory Translation.fromJson(Map<String, dynamic> json) =>
+      _$TranslationFromJson(json);
   Map<String, dynamic> toJson() => _$TranslationToJson(this);
 }
 
@@ -122,6 +130,7 @@ class Meaning {
 
   Meaning(this.locale, this.meaning, this.group);
 
-  factory Meaning.fromJson(Map<String, dynamic> json) => _$MeaningFromJson(json);
+  factory Meaning.fromJson(Map<String, dynamic> json) =>
+      _$MeaningFromJson(json);
   Map<String, dynamic> toJson() => _$MeaningToJson(this);
 }

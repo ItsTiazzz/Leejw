@@ -1,11 +1,10 @@
 import 'dart:convert';
-import 'dart:developer';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:leejw/l10n/app_localizations.dart';
 import 'package:leejw/form_fields/form_fields.dart';
+import 'package:leejw/l10n/app_localizations.dart';
 import 'package:leejw/voced/json/json.dart';
 import 'package:leejw/voced/voced.dart';
 import 'package:path_provider/path_provider.dart';
@@ -23,13 +22,13 @@ class LessonPage extends StatelessWidget {
 
     if (!initialised) {
       vocState.load();
-      
+
       initialised = true;
     }
 
     return Column(
       children: [
-        SizedBox(height: 4,),
+        SizedBox(height: 4),
         ElevatedButton.icon(
           onPressed: () => vocState.load(),
           label: Text(l10n.action_reload_lessons),
@@ -44,17 +43,19 @@ class LessonPage extends StatelessWidget {
                     context,
                     PageRouteBuilder(
                       pageBuilder: (context, animation, secondaryAnimation) {
-                        return LessonInsightWidget(vocState.getLessons()[index]);
+                        return LessonInsightWidget(
+                          vocState.getLessons()[index],
+                        );
                       },
-                    )
+                    ),
                   );
                   Feedback.forTap(context);
                 },
-                child: LessonCard(lesson: vocState.getLessons()[index])
+                child: LessonCard(lesson: vocState.getLessons()[index]),
               );
             },
             itemCount: vocState.getLessons().length,
-          )
+          ),
         ),
       ],
     );
@@ -63,7 +64,7 @@ class LessonPage extends StatelessWidget {
 
 class LessonInsightWidget extends StatefulWidget {
   final Lesson lesson;
-  const LessonInsightWidget(this.lesson, {super.key,});
+  const LessonInsightWidget(this.lesson, {super.key});
 
   @override
   State<LessonInsightWidget> createState() => _LessonInsightWidgetState();
@@ -83,18 +84,22 @@ class _LessonInsightWidgetState extends State<LessonInsightWidget> {
         title: Row(
           children: [
             Icon(Icons.collections_bookmark_outlined),
-            SizedBox(width: 5,),
+            SizedBox(width: 5),
             Text(lesson!.metaData.title),
           ],
         ),
         actions: [
           IconButton(
-            onPressed: () => showDialog(context: context,
+            onPressed: () => showDialog(
+              context: context,
               builder: (context) {
                 return Dialog(
                   child: Padding(
                     padding: const EdgeInsets.all(16.0),
-                    child: LessonEditForm(lesson!, (newValue) => setState(() => lesson = newValue)),
+                    child: LessonEditForm(
+                      lesson!,
+                      (newValue) => setState(() => lesson = newValue),
+                    ),
                   ),
                 );
               },
@@ -102,7 +107,8 @@ class _LessonInsightWidgetState extends State<LessonInsightWidget> {
             icon: Icon(Icons.edit_note_outlined),
           ),
           IconButton(
-            onPressed: () => showAdaptiveDialog(context: context,
+            onPressed: () => showAdaptiveDialog(
+              context: context,
               builder: (context) {
                 return AlertDialog.adaptive(
                   actions: [
@@ -115,7 +121,7 @@ class _LessonInsightWidgetState extends State<LessonInsightWidget> {
                       },
                       label: Text("Delete forever"),
                       icon: Icon(Icons.delete_forever_outlined),
-                    )
+                    ),
                   ],
                   title: Text('Are you sure you want to delete this lesson?'),
                   icon: Icon(Icons.warning_amber_outlined),
@@ -135,11 +141,11 @@ class _LessonInsightWidgetState extends State<LessonInsightWidget> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 for (var vocEntry in lesson!.getEntries(context))
-                  Chip(label: Text(vocEntry.information.metaData.word))
+                  Chip(label: Text(vocEntry.information.metaData.word)),
               ],
             ),
           ),
-        )
+        ),
       ),
     );
   }
@@ -171,9 +177,14 @@ class _LessonEditFormState extends State<LessonEditForm> {
   @override
   Widget build(BuildContext context) {
     List<String> tags = widget.lesson?.metaData.tags ?? [];
-    List<String> vocEntries = widget.lesson?.metaData.vocHolderIdentifiers ?? [];
-    _titleClr = TextEditingController.fromValue(TextEditingValue(text: widget.lesson?.metaData.title ?? ''));
-    _descriptionClr = TextEditingController.fromValue(TextEditingValue(text: widget.lesson?.metaData.description ?? ''));
+    List<String> vocEntries =
+        widget.lesson?.metaData.vocHolderIdentifiers ?? [];
+    _titleClr = TextEditingController.fromValue(
+      TextEditingValue(text: widget.lesson?.metaData.title ?? ''),
+    );
+    _descriptionClr = TextEditingController.fromValue(
+      TextEditingValue(text: widget.lesson?.metaData.description ?? ''),
+    );
     var vocState = Provider.of<VocEdState>(context, listen: false);
 
     return Form(
@@ -196,7 +207,7 @@ class _LessonEditFormState extends State<LessonEditForm> {
               return null;
             },
           ),
-          SizedBox(height: 12,),
+          SizedBox(height: 12),
           TextFormField(
             controller: _descriptionClr,
             maxLength: 64,
@@ -222,26 +233,40 @@ class _LessonEditFormState extends State<LessonEditForm> {
             ),
             onValueChanged: (value) => tags = value,
           ),
-          SizedBox(height: 8,),
+          SizedBox(height: 8),
           ListFormField(
             initialList: vocEntries,
             decoration: InputDecoration(
               border: OutlineInputBorder(),
               labelText: 'Entries',
-              hintText: 'Separate vocabulary words using commas, insert their id',
+              hintText:
+                  'Separate vocabulary words using commas, insert their id',
             ),
             onValueChanged: (value) => vocEntries = value,
             validate: (value) => vocState.getVocHolder(value) != null,
           ),
-          SizedBox(height: 8,),
+          SizedBox(height: 8),
           FilledButton.icon(
             onPressed: () {
               if (_formKey.currentState!.validate()) {
                 if (widget.lesson == null) {
-                  widget.lesson = Lesson(File(''), LessonMetaData(_titleClr!.text, _descriptionClr!.text, tags, vocEntries));
+                  widget.lesson = Lesson(
+                    File(''),
+                    LessonMetaData(
+                      _titleClr!.text,
+                      _descriptionClr!.text,
+                      tags,
+                      vocEntries,
+                    ),
+                  );
                 }
                 _formKey.currentState!.save();
-                widget.lesson!.metaData = LessonMetaData(_titleClr!.text, _descriptionClr!.text, tags, vocEntries);
+                widget.lesson!.metaData = LessonMetaData(
+                  _titleClr!.text,
+                  _descriptionClr!.text,
+                  tags,
+                  vocEntries,
+                );
                 widget.lesson!.write();
                 Navigator.pop(context);
                 Provider.of<VocEdState>(context, listen: false).load();
@@ -271,7 +296,9 @@ class Lesson {
   void write() async {
     // Write .meta.json
     Directory appDir = await getApplicationSupportDirectory();
-    File newFile = File('${appDir.path}/voced/lessons/${metaData.title}.meta.json');
+    File newFile = File(
+      '${appDir.path}/voced/lessons/${metaData.title}.meta.json',
+    );
     await newFile.create();
     var sink = newFile.openWrite();
     sink.write(jsonEncode(metaData.toJson()));
@@ -288,7 +315,9 @@ class Lesson {
       if (holder != null) {
         list.add(holder);
       } else {
-        logger.w('Tried to find Voc Holder with id $id but returned incorrect type $holder.');
+        logger.w(
+          'Tried to find Voc Holder with id $id but returned incorrect type $holder.',
+        );
       }
     }
     return list;
@@ -331,37 +360,49 @@ class _LessonCardState extends State<LessonCard> {
       child: Card(
         elevation: 20,
         color: theme.cardColor.withAlpha(100),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadiusGeometry.all(Radius.circular(30))),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadiusGeometry.all(Radius.circular(30)),
+        ),
         child: Padding(
           padding: const EdgeInsets.all(8.0),
           child: Column(
             children: [
-              Text(widget.lesson.metaData.title, style: theme.textTheme.titleLarge,),
-              SizedBox(height: 2,),
-              Text(widget.lesson.metaData.description, style: theme.textTheme.labelSmall,),
+              Text(
+                widget.lesson.metaData.title,
+                style: theme.textTheme.titleLarge,
+              ),
+              SizedBox(height: 2),
+              Text(
+                widget.lesson.metaData.description,
+                style: theme.textTheme.labelSmall,
+              ),
               Wrap(
                 children: [
                   for (var tag in widget.lesson.metaData.tags)
                     Card(
                       child: Padding(
                         padding: const EdgeInsets.all(4.0),
-                        child: Text(tag, style: theme.textTheme.labelSmall,),
+                        child: Text(tag, style: theme.textTheme.labelSmall),
                       ),
                     ),
                 ],
               ),
-              SizedBox(height: 10,),
+              SizedBox(height: 10),
               Card(
                 child: Wrap(
                   children: [
                     for (var vce in widget.lesson.getEntries(context))
-                      for (var translation in vce.information.vocData.translations)
-                        Text('${translation.translation} ', overflow: TextOverflow.fade,),
+                      for (var translation
+                          in vce.information.vocData.translations)
+                        Text(
+                          '${translation.translation} ',
+                          overflow: TextOverflow.fade,
+                        ),
                   ],
                 ),
               ),
             ],
-          )
+          ),
         ),
       ),
     );

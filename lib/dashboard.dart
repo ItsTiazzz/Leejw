@@ -15,10 +15,18 @@ class Dashboard extends StatelessWidget {
         children: [
           Wrap(
             children: [
-              DashboardEntry(text: l10n.lessons_goto, icon: Icon(Icons.collections_bookmark_outlined), onPressed: (gState) => gState.setSelectedIndex(1),),
-              DashboardEntry(text: l10n.settings_goto, icon: Icon(Icons.settings_suggest_outlined), onPressed: (gState) => gState.setSelectedIndex(2),),
+              DashboardEntry(
+                text: l10n.lessons_goto,
+                icon: Icon(Icons.collections_bookmark_outlined),
+                onPressed: (gState) => gState.setSelectedIndex(1),
+              ),
+              DashboardEntry(
+                text: l10n.settings_goto,
+                icon: Icon(Icons.settings_suggest_outlined),
+                onPressed: (gState) => gState.setSelectedIndex(2),
+              ),
             ],
-          )
+          ),
         ],
       ),
     );
@@ -46,18 +54,12 @@ class DashboardEntry extends StatelessWidget {
       elevation: 20,
       color: theme.cardColor.withAlpha(100),
       child: Padding(
-      padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(16.0),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(
-              text,
-              style: theme.textTheme.titleLarge,
-            ),
-            IconButton.filled(
-              onPressed: () => onPressed(gState),
-              icon: icon,
-            ),
+            Text(text, style: theme.textTheme.titleLarge),
+            IconButton.filled(onPressed: () => onPressed(gState), icon: icon),
           ],
         ),
       ),

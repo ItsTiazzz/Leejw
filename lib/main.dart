@@ -1,27 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:leejw/dashboard.dart';
-import 'package:leejw/voced/lesson_page.dart';
 import 'package:leejw/l10n/app_localizations.dart';
 import 'package:leejw/settings.dart';
+import 'package:leejw/voced/lesson_page.dart';
 import 'package:leejw/voced/voced.dart';
 import 'package:leejw/voced/voced_page.dart';
 import 'package:logger/logger.dart';
 import 'package:provider/provider.dart';
 
-Logger logger = Logger(printer: PrettyPrinter(
-  dateTimeFormat: DateTimeFormat.onlyTimeAndSinceStart,
-  printEmojis: false,
-  noBoxingByDefault: true,
-  excludeBox: {
-    Level.warning: false,
-    Level.error: false,
-    Level.fatal: false
-  },
-));
+Logger logger = Logger(
+  printer: PrettyPrinter(
+    dateTimeFormat: DateTimeFormat.onlyTimeAndSinceStart,
+    printEmojis: false,
+    noBoxingByDefault: true,
+    excludeBox: {Level.warning: false, Level.error: false, Level.fatal: false},
+  ),
+);
 
 void main() {
   runApp(const LeejwApp());
-  logger.t('Started LeejwApp. Thanks for using Leejw! Learn like a lion hunts.');
+  logger.t(
+    'Started LeejwApp. Thanks for using Leejw! Learn like a lion hunts.',
+  );
 }
 
 class LeejwApp extends StatelessWidget {
@@ -31,8 +31,8 @@ class LeejwApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider<GlobalState>(create: (context) => GlobalState(),),
-        ChangeNotifierProvider<VocEdState>(create: (context) => VocEdState(),),
+        ChangeNotifierProvider<GlobalState>(create: (context) => GlobalState()),
+        ChangeNotifierProvider<VocEdState>(create: (context) => VocEdState()),
       ],
       builder: (context, child) {
         var gState = Provider.of<GlobalState>(context);
@@ -88,7 +88,6 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-
   var extensionOverride = false;
 
   @override
@@ -102,7 +101,9 @@ class _HomePageState extends State<HomePage> {
       1 => LessonPage(),
       2 => SettingsPage(),
       3 => VocEditorPage(),
-      _ => throw UnimplementedError('No "page" widget for requested index: $selectedIndex')
+      _ => throw UnimplementedError(
+        'No "page" widget for requested index: $selectedIndex',
+      ),
     };
 
     return LayoutBuilder(
@@ -117,7 +118,7 @@ class _HomePageState extends State<HomePage> {
               child: Row(
                 children: [
                   Icon(Icons.category_outlined),
-                  SizedBox(width: 5,),
+                  SizedBox(width: 5),
                   Text('Leejw'),
                 ],
               ),
@@ -129,11 +130,12 @@ class _HomePageState extends State<HomePage> {
                 child: Container(
                   color: Theme.of(context).colorScheme.primaryContainer,
                   child: page,
-                )
+                ),
               ),
               SafeArea(
                 child: NavigationBar(
-                  onDestinationSelected: (value) => setState(() => gState.setSelectedIndex(value)),
+                  onDestinationSelected: (value) =>
+                      setState(() => gState.setSelectedIndex(value)),
                   selectedIndex: selectedIndex,
                   destinations: [
                     NavigationDestination(
@@ -151,14 +153,14 @@ class _HomePageState extends State<HomePage> {
                     NavigationDestination(
                       icon: Icon(Icons.abc_outlined),
                       label: l10n.voced_title,
-                    )
-                  ]
+                    ),
+                  ],
                 ),
               ),
             ],
           ),
         );
-      }
+      },
     );
   }
 }

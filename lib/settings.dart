@@ -9,9 +9,15 @@ import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
-const titleShape = RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.elliptical(20, 30)));
-const shape = RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(20)));
-const snackBarShape = RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10)));
+const titleShape = RoundedRectangleBorder(
+  borderRadius: BorderRadius.all(Radius.elliptical(20, 30)),
+);
+const shape = RoundedRectangleBorder(
+  borderRadius: BorderRadius.all(Radius.circular(20)),
+);
+const snackBarShape = RoundedRectangleBorder(
+  borderRadius: BorderRadius.all(Radius.circular(10)),
+);
 
 class SettingsPage extends StatelessWidget {
   const SettingsPage({super.key});
@@ -23,24 +29,46 @@ class SettingsPage extends StatelessWidget {
 
     return ListView(
       children: [
-        SettingTitleCard(title: l10n.generic_theme, icon: Icon(Icons.format_paint_outlined),),
+        SettingTitleCard(
+          title: l10n.generic_theme,
+          icon: Icon(Icons.format_paint_outlined),
+        ),
         SettingCard(
-          title: Text(l10n.settings_toggle_mode(gState.isDarkMode() ? l10n.generic_light : l10n.generic_dark)),
-          icon: Icon(gState.isDarkMode() ? Icons.light_mode_outlined : Icons.dark_mode_outlined),
+          title: Text(
+            l10n.settings_toggle_mode(
+              gState.isDarkMode() ? l10n.generic_light : l10n.generic_dark,
+            ),
+          ),
+          icon: Icon(
+            gState.isDarkMode()
+                ? Icons.light_mode_outlined
+                : Icons.dark_mode_outlined,
+          ),
           onTap: () => gState.nextMode(),
         ),
-        SettingTitleCard(title: l10n.generic_accessibility, icon: Icon(Icons.accessibility_new_outlined),),
+        SettingTitleCard(
+          title: l10n.generic_accessibility,
+          icon: Icon(Icons.accessibility_new_outlined),
+        ),
         LocaleSettingCard(),
-        SettingTitleCard(title: l10n.generic_info, icon: Icon(Icons.info_outlined)),
-        ExternalLinkSettingCard(title: l10n.generic_report_bugs, uri: Uri.parse('https://github.com/ItsTiazzz/Leejw/issues')),
+        SettingTitleCard(
+          title: l10n.generic_info,
+          icon: Icon(Icons.info_outlined),
+        ),
+        ExternalLinkSettingCard(
+          title: l10n.generic_report_bugs,
+          uri: Uri.parse('https://github.com/ItsTiazzz/Leejw/issues'),
+        ),
         StatefulBuilder(
-            builder: (context, setState) => SettingCard(
-              title: Text('${DateTimeFormat.onlyTimeAndSinceStart(DateTime.now())}\nClick to refresh'),
-              icon: Icon(Icons.timer_outlined),
-              onTap: () => setState(() {
-                return;
-              },),
+          builder: (context, setState) => SettingCard(
+            title: Text(
+              '${DateTimeFormat.onlyTimeAndSinceStart(DateTime.now())}\nClick to refresh',
             ),
+            icon: Icon(Icons.timer_outlined),
+            onTap: () => setState(() {
+              return;
+            }),
+          ),
         ),
       ],
     );
@@ -48,11 +76,7 @@ class SettingsPage extends StatelessWidget {
 }
 
 class SettingTitleCard extends StatelessWidget {
-  const SettingTitleCard({
-    super.key,
-    required this.title,
-    required this.icon,
-  });
+  const SettingTitleCard({super.key, required this.title, required this.icon});
 
   final String title;
   final Icon icon;
@@ -64,7 +88,7 @@ class SettingTitleCard extends StatelessWidget {
       child: ListTile(
         shape: shape,
         leading: icon,
-        title: Text(title, style: Theme.of(context).textTheme.headlineMedium,),
+        title: Text(title, style: Theme.of(context).textTheme.headlineMedium),
       ),
     );
   }
@@ -118,18 +142,31 @@ class LocaleSettingCard extends StatelessWidget {
                 label: l10n.action_open_locale_settings,
                 onPressed: () {
                   try {
-                    if (Platform.isIOS) launchUrlString("prefs:root=General&path=INTERNATIONAL/DEVICE_LANGUAGE");
-                    else if (Platform.isWindows) launchUrlString("ms-settings:keyboard");
-                    else if (Platform.isAndroid) AppSettings.openAppSettings(type: AppSettingsType.generalSettings); // Best I can do
-                    else AppSettings.openAppSettings(type: AppSettingsType.settings); // Last resort only
-                  } catch(e) {
-                    logger.f('We currently can\'t open settings for ${Platform.operatingSystem} in any way.', error: e);
+                    if (Platform.isIOS)
+                      launchUrlString(
+                        "prefs:root=General&path=INTERNATIONAL/DEVICE_LANGUAGE",
+                      );
+                    else if (Platform.isWindows)
+                      launchUrlString("ms-settings:keyboard");
+                    else if (Platform.isAndroid)
+                      AppSettings.openAppSettings(
+                        type: AppSettingsType.generalSettings,
+                      ); // Best I can do
+                    else
+                      AppSettings.openAppSettings(
+                        type: AppSettingsType.settings,
+                      ); // Last resort only
+                  } catch (e) {
+                    logger.f(
+                      'We currently can\'t open settings for ${Platform.operatingSystem} in any way.',
+                      error: e,
+                    );
                   }
                 },
               ),
               shape: snackBarShape,
               behavior: SnackBarBehavior.floating,
-            )
+            ),
           );
         },
       ),
@@ -140,7 +177,11 @@ class LocaleSettingCard extends StatelessWidget {
 class ExternalLinkSettingCard extends StatelessWidget {
   final String title;
   final Uri uri;
-  const ExternalLinkSettingCard({super.key, required this.title, required this.uri});
+  const ExternalLinkSettingCard({
+    super.key,
+    required this.title,
+    required this.uri,
+  });
 
   @override
   Widget build(BuildContext context) {
