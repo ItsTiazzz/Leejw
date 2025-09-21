@@ -24,7 +24,7 @@
 
 import 'package:flutter/material.dart';
 
-import '../../l10n/app_localizations.dart';
+import '../l10n/app_localizations.dart';
 
 /// A form field widget for inputting and displaying tags.
 ///
