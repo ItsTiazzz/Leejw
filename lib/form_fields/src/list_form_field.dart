@@ -24,6 +24,8 @@
 
 import 'package:flutter/material.dart';
 
+import '../../l10n/app_localizations.dart';
+
 /// A form field widget for inputting and displaying tags.
 ///
 /// This widget allows users to input tags as a comma-separated list
@@ -154,6 +156,8 @@ class _ListFormFieldState extends State<ListFormField> {
 
   /// Builds a [Container] with a [Dismissible] to display a single entry.
   Widget _buildEntryWidget(String label, int index) {
+    var l10n = AppLocalizations.of(context)!;
+
     return Container(
       margin: const EdgeInsets.only(right: 4.0, top: 4.0, bottom: 4.0),
       child: Dismissible(
@@ -167,7 +171,7 @@ class _ListFormFieldState extends State<ListFormField> {
                   label,
                   style: Theme.of(context).textTheme.titleSmall,
                 ),
-                trailing: Text("Swipe to remove"),
+                trailing: Text(l10n.hint_swipe_to_remove),
                 dense: true,
                 tileColor: Theme.of(context).colorScheme.inversePrimary,
               )
@@ -177,7 +181,7 @@ class _ListFormFieldState extends State<ListFormField> {
                   style: Theme.of(context).textTheme.titleSmall,
                 ),
                 leading: Icon(Icons.error_outline),
-                trailing: Text("Invalid! Swipe to remove"),
+                trailing: Text("${l10n.error_invalid} ${l10n.hint_swipe_to_remove}"),
                 // dense: true,
                 tileColor: Theme.of(context).colorScheme.errorContainer,
               ),

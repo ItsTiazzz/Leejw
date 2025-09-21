@@ -134,6 +134,24 @@ abstract class AppLocalizations {
   /// **'Go to your Lessons'**
   String get lessons_goto;
 
+  /// No description provided for @lessons_lesson.
+  ///
+  /// In en, this message translates to:
+  /// **'Lesson'**
+  String get lessons_lesson;
+
+  /// No description provided for @lessons_lesson_this.
+  ///
+  /// In en, this message translates to:
+  /// **'This Lesson'**
+  String get lessons_lesson_this;
+
+  /// No description provided for @lessons_lesson_this_.
+  ///
+  /// In en, this message translates to:
+  /// **'this Lesson'**
+  String get lessons_lesson_this_;
+
   /// No description provided for @settings_title.
   ///
   /// In en, this message translates to:
@@ -145,6 +163,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Go to Settings'**
   String get settings_goto;
+
+  /// No description provided for @settings_accessibility.
+  ///
+  /// In en, this message translates to:
+  /// **'Accessibility'**
+  String get settings_accessibility;
+
+  /// No description provided for @settings_toggle_mode.
+  ///
+  /// In en, this message translates to:
+  /// **'Change to {mode} mode'**
+  String settings_toggle_mode(String mode);
+
+  /// No description provided for @settings_change.
+  ///
+  /// In en, this message translates to:
+  /// **'Change {change}'**
+  String settings_change(String change);
+
+  /// No description provided for @settings_report_bugs.
+  ///
+  /// In en, this message translates to:
+  /// **'Report Bugs'**
+  String get settings_report_bugs;
 
   /// No description provided for @voced_title.
   ///
@@ -158,17 +200,83 @@ abstract class AppLocalizations {
   /// **'Go to the VocEd'**
   String get voced_goto;
 
-  /// No description provided for @voced_create_vocdata.
+  /// No description provided for @voced_data.
   ///
   /// In en, this message translates to:
-  /// **'Create new voc data'**
-  String get voced_create_vocdata;
+  /// **'Voc Data'**
+  String get voced_data;
 
-  /// No description provided for @voced_create_lesson.
+  /// No description provided for @voced_meaning.
   ///
   /// In en, this message translates to:
-  /// **'Create new lesson'**
-  String get voced_create_lesson;
+  /// **'Meaning'**
+  String get voced_meaning;
+
+  /// No description provided for @voced_meanings.
+  ///
+  /// In en, this message translates to:
+  /// **'Meanings'**
+  String get voced_meanings;
+
+  /// No description provided for @voced_translation.
+  ///
+  /// In en, this message translates to:
+  /// **'Translation'**
+  String get voced_translation;
+
+  /// No description provided for @voced_translations.
+  ///
+  /// In en, this message translates to:
+  /// **'Translations'**
+  String get voced_translations;
+
+  /// No description provided for @voced_addition.
+  ///
+  /// In en, this message translates to:
+  /// **'Addition'**
+  String get voced_addition;
+
+  /// No description provided for @voced_additions.
+  ///
+  /// In en, this message translates to:
+  /// **'Additions'**
+  String get voced_additions;
+
+  /// No description provided for @voced_word.
+  ///
+  /// In en, this message translates to:
+  /// **'Word'**
+  String get voced_word;
+
+  /// No description provided for @voced_words.
+  ///
+  /// In en, this message translates to:
+  /// **'Words'**
+  String get voced_words;
+
+  /// No description provided for @voced_word_this.
+  ///
+  /// In en, this message translates to:
+  /// **'This Word'**
+  String get voced_word_this;
+
+  /// No description provided for @voced_word_this_.
+  ///
+  /// In en, this message translates to:
+  /// **'this Word'**
+  String get voced_word_this_;
+
+  /// No description provided for @voced_word_id.
+  ///
+  /// In en, this message translates to:
+  /// **'Word ID'**
+  String get voced_word_id;
+
+  /// No description provided for @voced_word_ids.
+  ///
+  /// In en, this message translates to:
+  /// **'Word IDs'**
+  String get voced_word_ids;
 
   /// No description provided for @generic_tags.
   ///
@@ -194,23 +302,125 @@ abstract class AppLocalizations {
   /// **'Light'**
   String get generic_light;
 
-  /// No description provided for @generic_report_bugs.
-  ///
-  /// In en, this message translates to:
-  /// **'Report Bugs'**
-  String get generic_report_bugs;
-
-  /// No description provided for @generic_accessibility.
-  ///
-  /// In en, this message translates to:
-  /// **'Accessibility'**
-  String get generic_accessibility;
-
   /// No description provided for @generic_info.
   ///
   /// In en, this message translates to:
   /// **'Info'**
   String get generic_info;
+
+  /// No description provided for @generic_value.
+  ///
+  /// In en, this message translates to:
+  /// **'Value'**
+  String get generic_value;
+
+  /// No description provided for @generic_locale.
+  ///
+  /// In en, this message translates to:
+  /// **'Locale'**
+  String get generic_locale;
+
+  /// No description provided for @generic_locale_example.
+  ///
+  /// In en, this message translates to:
+  /// **'Locale (e.g., en, de, fr)'**
+  String get generic_locale_example;
+
+  /// No description provided for @generic_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Title'**
+  String get generic_title;
+
+  /// No description provided for @generic_description.
+  ///
+  /// In en, this message translates to:
+  /// **'Description'**
+  String get generic_description;
+
+  /// No description provided for @generic_commas.
+  ///
+  /// In en, this message translates to:
+  /// **'Commas'**
+  String get generic_commas;
+
+  /// No description provided for @generic_entries.
+  ///
+  /// In en, this message translates to:
+  /// **'Entries'**
+  String get generic_entries;
+
+  /// No description provided for @generic_field.
+  ///
+  /// In en, this message translates to:
+  /// **'Field'**
+  String get generic_field;
+
+  /// No description provided for @generic_field_this.
+  ///
+  /// In en, this message translates to:
+  /// **'This field'**
+  String get generic_field_this;
+
+  /// No description provided for @generic_field_this_.
+  ///
+  /// In en, this message translates to:
+  /// **'this field'**
+  String get generic_field_this_;
+
+  /// No description provided for @error_invalid.
+  ///
+  /// In en, this message translates to:
+  /// **'Invalid!'**
+  String get error_invalid;
+
+  /// No description provided for @error_invalid_.
+  ///
+  /// In en, this message translates to:
+  /// **'Invalid'**
+  String get error_invalid_;
+
+  /// No description provided for @error_enter_value.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter a value'**
+  String get error_enter_value;
+
+  /// No description provided for @error_enter_locale.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter a locale'**
+  String get error_enter_locale;
+
+  /// No description provided for @error_required.
+  ///
+  /// In en, this message translates to:
+  /// **'{object} is required!'**
+  String error_required(String object);
+
+  /// No description provided for @error_invalid_format.
+  ///
+  /// In en, this message translates to:
+  /// **'Invalid {value} format'**
+  String error_invalid_format(String value);
+
+  /// No description provided for @warning_delete.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to delete {object}?'**
+  String warning_delete(String object);
+
+  /// No description provided for @hint_swipe_to_remove.
+  ///
+  /// In en, this message translates to:
+  /// **'Swipe to remove'**
+  String get hint_swipe_to_remove;
+
+  /// No description provided for @hint_separate.
+  ///
+  /// In en, this message translates to:
+  /// **'Separate {object} using {separators}'**
+  String hint_separate(String object, Object separators);
 
   /// No description provided for @action_reload_lessons.
   ///
@@ -224,17 +434,35 @@ abstract class AppLocalizations {
   /// **'Open settings'**
   String get action_open_locale_settings;
 
-  /// No description provided for @settings_toggle_mode.
+  /// No description provided for @action_confirm.
   ///
   /// In en, this message translates to:
-  /// **'Change to {mode} mode'**
-  String settings_toggle_mode(String mode);
+  /// **'Confirm'**
+  String get action_confirm;
 
-  /// No description provided for @settings_change_locale.
+  /// No description provided for @action_click_refresh.
   ///
   /// In en, this message translates to:
-  /// **'Change Locale'**
-  String get settings_change_locale;
+  /// **'Click to refresh'**
+  String get action_click_refresh;
+
+  /// No description provided for @action_delete.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete'**
+  String get action_delete;
+
+  /// No description provided for @action_delete_forever.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete forever'**
+  String get action_delete_forever;
+
+  /// No description provided for @action_create_new.
+  ///
+  /// In en, this message translates to:
+  /// **'Create new {object}'**
+  String action_create_new(Object object);
 
   /// No description provided for @snackbar_locale_definement.
   ///

@@ -43,7 +43,7 @@ class VocEditorPage extends StatelessWidget {
                   );
                 },
               ),
-              label: Text(l10n.voced_create_vocdata),
+              label: Text(l10n.action_create_new(l10n.voced_data)),
             ),
             SizedBox(width: 4),
             ElevatedButton.icon(
@@ -62,7 +62,7 @@ class VocEditorPage extends StatelessWidget {
                   );
                 },
               ),
-              label: Text(l10n.voced_create_lesson),
+              label: Text(l10n.action_create_new(l10n.lessons_lesson)),
             ),
           ],
         ),
@@ -110,6 +110,7 @@ class _VocHolderCardState extends State<VocHolderCard> {
   @override
   Widget build(BuildContext context) {
     var theme = Theme.of(context);
+    var l10n = AppLocalizations.of(context)!;
 
     return AnimatedOpacity(
       opacity: opacity,
@@ -191,11 +192,11 @@ class _VocHolderCardState extends State<VocHolderCard> {
                               listen: false,
                             ).load();
                           },
-                          label: Text("Delete forever"),
+                          label: Text(l10n.action_delete_forever),
                           icon: Icon(Icons.delete_forever_outlined),
                         ),
                       ],
-                      title: Text('Are you sure you want to delete this word?'),
+                      title: Text(l10n.warning_delete(l10n.voced_word_this_)),
                       icon: Icon(Icons.warning_amber_outlined),
                       actionsAlignment: MainAxisAlignment.center,
                     );

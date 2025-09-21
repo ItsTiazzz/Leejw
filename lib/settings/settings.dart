@@ -47,7 +47,7 @@ class SettingsPage extends StatelessWidget {
           onTap: () => gState.nextMode(),
         ),
         SettingTitleCard(
-          title: l10n.generic_accessibility,
+          title: l10n.settings_accessibility,
           icon: Icon(Icons.accessibility_new_outlined),
         ),
         LocaleSettingCard(),
@@ -56,13 +56,13 @@ class SettingsPage extends StatelessWidget {
           icon: Icon(Icons.info_outlined),
         ),
         ExternalLinkSettingCard(
-          title: l10n.generic_report_bugs,
+          title: l10n.settings_report_bugs,
           uri: Uri.parse('https://github.com/ItsTiazzz/Leejw/issues'),
         ),
         StatefulBuilder(
           builder: (context, setState) => SettingCard(
             title: Text(
-              '${DateTimeFormat.onlyTimeAndSinceStart(DateTime.now())}\nClick to refresh',
+              '${DateTimeFormat.onlyTimeAndSinceStart(DateTime.now())}\n${l10n.action_click_refresh}',
             ),
             icon: Icon(Icons.timer_outlined),
             onTap: () => setState(() {
@@ -132,7 +132,7 @@ class LocaleSettingCard extends StatelessWidget {
       child: ListTile(
         shape: shape,
         leading: Icon(Icons.language_outlined),
-        title: Text(l10n.settings_change_locale),
+        title: Text(l10n.settings_change(l10n.generic_locale)),
         onTap: () {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
@@ -185,14 +185,12 @@ class ExternalLinkSettingCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var l10n = AppLocalizations.of(context)!;
-
     return Card(
       shape: shape,
       child: ListTile(
         shape: shape,
         leading: Icon(Icons.link_outlined),
-        title: Text(l10n.generic_report_bugs),
+        title: Text(title),
         onTap: () {
           launchUrl(uri);
         },

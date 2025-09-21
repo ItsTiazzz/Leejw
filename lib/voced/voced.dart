@@ -11,6 +11,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 
 import '../form_fields/form_fields.dart';
+import '../l10n/app_localizations.dart';
 import '../main.dart';
 
 var initialised = false;
@@ -149,6 +150,7 @@ class _VocDataHolderEditFormState extends State<VocDataHolderEditForm> {
         ),
       );
     }
+    var l10n = AppLocalizations.of(context)!;
 
     return Form(
       key: _formKey,
@@ -161,14 +163,14 @@ class _VocDataHolderEditFormState extends State<VocDataHolderEditForm> {
           ),
           SizedBox(height: 8),
           StringWithLocaleListFormField(
-            label: Text('Meanings'),
+            label: Text(l10n.voced_meanings),
             initialValues: meanings,
             onValueChanged: (value) => meanings = value,
             validate: (value) => value.value.isNotEmpty,
           ),
           SizedBox(height: 8),
           StringWithLocaleListFormField(
-            label: Text('Translations'),
+            label: Text(l10n.voced_translations),
             initialValues: translations,
             onValueChanged: (value) => translations = value,
             validate: (value) => value.value.isNotEmpty,
@@ -176,10 +178,10 @@ class _VocDataHolderEditFormState extends State<VocDataHolderEditForm> {
           SizedBox(height: 8),
           RequirementsFormField(
             initialRequirements: additions,
-            decoration: const InputDecoration(
-              border: OutlineInputBorder(),
-              labelText: 'Additions',
-              hintText: 'Seperate entries using commas',
+            decoration: InputDecoration(
+              border: const OutlineInputBorder(),
+              labelText: l10n.generic_entries,
+              hintText: l10n.hint_separate(l10n.generic_entries, l10n.generic_commas),
             ),
             onValueChanged: (value) => additions = value,
           ),
@@ -215,7 +217,7 @@ class _VocDataHolderEditFormState extends State<VocDataHolderEditForm> {
                 logger.i('Holder edited: ${widget.holder}');
               }
             },
-            label: const Text('Confirm'),
+            label: Text(l10n.action_confirm),
             icon: Icon(Icons.edit_outlined),
           ),
         ],

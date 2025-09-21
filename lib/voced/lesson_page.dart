@@ -78,6 +78,7 @@ class _LessonInsightWidgetState extends State<LessonInsightWidget> {
     setState(() {
       lesson = widget.lesson;
     });
+    var l10n = AppLocalizations.of(context)!;
 
     return Scaffold(
       appBar: AppBar(
@@ -119,11 +120,11 @@ class _LessonInsightWidgetState extends State<LessonInsightWidget> {
                         Navigator.pop(context);
                         Provider.of<VocEdState>(context, listen: false).load();
                       },
-                      label: Text("Delete forever"),
+                      label: Text(l10n.action_delete_forever),
                       icon: Icon(Icons.delete_forever_outlined),
                     ),
                   ],
-                  title: Text('Are you sure you want to delete this lesson?'),
+                  title: Text(l10n.warning_delete(l10n.lessons_lesson_this_)),
                   icon: Icon(Icons.warning_amber_outlined),
                   actionsAlignment: MainAxisAlignment.center,
                 );
@@ -186,6 +187,7 @@ class _LessonEditFormState extends State<LessonEditForm> {
       TextEditingValue(text: widget.lesson?.metaData.description ?? ''),
     );
     var vocState = Provider.of<VocEdState>(context, listen: false);
+    var l10n = AppLocalizations.of(context)!;
 
     return Form(
       key: _formKey,
@@ -198,11 +200,11 @@ class _LessonEditFormState extends State<LessonEditForm> {
             maxLengthEnforcement: MaxLengthEnforcement.enforced,
             decoration: InputDecoration(
               border: OutlineInputBorder(),
-              labelText: 'Title',
+              labelText: l10n.generic_title,
             ),
             validator: (String? value) {
               if (value == null || value.isEmpty) {
-                return 'This field is required!';
+                return l10n.error_required(l10n.generic_field_this);
               }
               return null;
             },
@@ -215,11 +217,11 @@ class _LessonEditFormState extends State<LessonEditForm> {
             maxLines: 2,
             decoration: InputDecoration(
               border: OutlineInputBorder(),
-              labelText: 'Description',
+              labelText: l10n.generic_description,
             ),
             validator: (String? value) {
               if (value == null || value.isEmpty) {
-                return 'This field is required!';
+                return l10n.error_required(l10n.generic_field_this);
               }
               return null;
             },
@@ -228,8 +230,8 @@ class _LessonEditFormState extends State<LessonEditForm> {
             initialTags: tags,
             decoration: InputDecoration(
               border: OutlineInputBorder(),
-              labelText: 'Tags',
-              hintText: 'Separate tags using commas',
+              labelText: l10n.generic_tags,
+              hintText: l10n.hint_separate(l10n.generic_tags, l10n.generic_commas),
             ),
             onValueChanged: (value) => tags = value,
           ),
@@ -238,9 +240,9 @@ class _LessonEditFormState extends State<LessonEditForm> {
             initialList: vocEntries,
             decoration: InputDecoration(
               border: OutlineInputBorder(),
-              labelText: 'Entries',
+              labelText: l10n.generic_entries,
               hintText:
-                  'Separate vocabulary words using commas, insert their id',
+              l10n.hint_separate(l10n.voced_word_ids, l10n.generic_commas),
             ),
             onValueChanged: (value) => vocEntries = value,
             validate: (value) => vocState.getVocHolder(value) != null,
@@ -274,7 +276,7 @@ class _LessonEditFormState extends State<LessonEditForm> {
                 logger.i('Lesson edited: ${widget.lesson}');
               }
             },
-            label: const Text('Confirm'),
+            label: Text(l10n.action_confirm),
             icon: Icon(Icons.edit_outlined),
           ),
         ],

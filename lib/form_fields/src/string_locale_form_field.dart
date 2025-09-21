@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:leejw/main.dart';
 
+import '../../l10n/app_localizations.dart';
+
 class StringWithLocaleFormField extends StatefulWidget {
   const StringWithLocaleFormField(
     this.initialValue,
@@ -21,10 +23,12 @@ class StringWithLocaleFormFieldState extends State<StringWithLocaleFormField> {
   StringWithLocale? _currentValue;
 
   Widget _buildChip() {
+    var l10n = AppLocalizations.of(context)!;
+
     return Container(
       margin: const EdgeInsets.only(right: 4.0, top: 4.0, bottom: 4.0),
       child: Chip(
-        label: Text(_currentValue?.value ?? 'Value'),
+        label: Text(_currentValue?.value ?? l10n.generic_value),
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(32.0),
@@ -240,6 +244,7 @@ class _StringWithLocaleFormState extends State<StringWithLocaleForm> {
         text: widget.stringWithLocale?.locale.toLanguageTag() ?? '',
       ),
     );
+    var l10n = AppLocalizations.of(context)!;
 
     return Form(
       key: _formKey,
@@ -248,13 +253,13 @@ class _StringWithLocaleFormState extends State<StringWithLocaleForm> {
         children: [
           TextFormField(
             controller: _valueController,
-            decoration: const InputDecoration(
-              border: OutlineInputBorder(),
-              labelText: 'Value',
+            decoration: InputDecoration(
+              border: const OutlineInputBorder(),
+              labelText: l10n.generic_value,
             ),
             validator: (value) {
               if (value == null || value.isEmpty) {
-                return 'Please enter a value';
+                return l10n.error_required(l10n.generic_field_this);
               }
               return null;
             },
@@ -262,21 +267,21 @@ class _StringWithLocaleFormState extends State<StringWithLocaleForm> {
           SizedBox(height: 8),
           TextFormField(
             controller: _localeController,
-            decoration: const InputDecoration(
-              border: OutlineInputBorder(),
-              labelText: 'Locale (e.g., en, de, fr)',
+            decoration: InputDecoration(
+              border: const OutlineInputBorder(),
+              labelText: l10n.generic_locale_example,
             ),
             validator: (value) {
               if (value == null || value.isEmpty) {
-                return 'Please enter a locale';
+                return l10n.error_required(l10n.generic_field_this);
               }
               try {
                 Locale locale = Locale(value);
                 if (locale.languageCode.isEmpty) {
-                  return 'Invalid locale format';
+                  return l10n.error_invalid_format(l10n.generic_locale);
                 }
               } catch (e) {
-                return 'Invalid locale format';
+                return l10n.error_invalid_format(l10n.generic_locale);
               }
               return null;
             },
@@ -295,7 +300,7 @@ class _StringWithLocaleFormState extends State<StringWithLocaleForm> {
                 widget.onSubmit(widget.stringWithLocale!);
               }
             },
-            label: const Text('Confirm'),
+            label: Text(l10n.action_confirm),
             icon: Icon(Icons.edit_outlined),
           ),
         ],
