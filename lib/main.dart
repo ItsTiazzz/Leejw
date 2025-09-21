@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:leejw/dashboard.dart';
 import 'package:leejw/l10n/app_localizations.dart';
-import 'package:leejw/settings.dart';
+import 'package:leejw/settings/settings.dart';
 import 'package:leejw/voced/lesson_page.dart';
 import 'package:leejw/voced/voced.dart';
 import 'package:leejw/voced/voced_page.dart';
