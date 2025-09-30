@@ -114,13 +114,5 @@
   "action_delete": "Delete",
   "action_delete_forever": "Delete forever",
   "action_create_new": "Create new {object}",
-  "@hint_separate": {
-    "placeholders": {
-      "object": {
-        "type": "String",
-        "example": "Lesson"
-      }
-    }
-  },
   "snackbar_locale_definement": "Locales are currently defined by your device settings!"
 }

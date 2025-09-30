@@ -420,7 +420,7 @@ abstract class AppLocalizations {
   ///
   /// In en, this message translates to:
   /// **'Separate {object} using {separators}'**
-  String hint_separate(String object, Object separators);
+  String hint_separate(String object, String separators);
 
   /// No description provided for @action_reload_lessons.
   ///

@@ -178,7 +178,7 @@ class AppLocalizationsNl extends AppLocalizations {
   String get hint_swipe_to_remove => 'Swipe to remove';
 
   @override
-  String hint_separate(String object, Object separators) {
+  String hint_separate(String object, String separators) {
     return 'Separate $object using $separators';
   }
 
