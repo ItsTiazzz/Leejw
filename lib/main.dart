@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:leejw/dashboard.dart';
+import 'package:leejw/flashing/flash_system.dart';
 import 'package:leejw/l10n/app_localizations.dart';
 import 'package:leejw/settings/settings.dart';
 import 'package:leejw/voced/lesson_page.dart';
@@ -33,6 +34,7 @@ class LeejwApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider<GlobalState>(create: (context) => GlobalState()),
         ChangeNotifierProvider<VocEdState>(create: (context) => VocEdState()),
+        ChangeNotifierProvider<FlashState>(create: (context) => FlashState()),
       ],
       builder: (context, child) {
         var gState = Provider.of<GlobalState>(context);

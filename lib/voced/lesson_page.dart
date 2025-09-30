@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:leejw/flashing/flash_system.dart';
 import 'package:leejw/form_fields/form_fields.dart';
 import 'package:leejw/l10n/app_localizations.dart';
 import 'package:leejw/voced/json/json.dart';
@@ -132,6 +133,10 @@ class _LessonInsightWidgetState extends State<LessonInsightWidget> {
             ),
             icon: Icon(Icons.delete_outlined),
           ),
+          IconButton(
+              onPressed: () => Provider.of<FlashState>(context, listen: false).startLesson(lesson!, context),
+              icon: Icon(Icons.not_started_outlined)
+          )
         ],
       ),
       body: Expanded(
