@@ -1,12 +1,17 @@
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:leejw/dashboard.dart';
 import 'package:leejw/flashing/flash_system.dart';
 import 'package:leejw/l10n/app_localizations.dart';
+import 'package:leejw/settings/json/settings.dart';
 import 'package:leejw/settings/settings.dart';
 import 'package:leejw/voced/lesson_page.dart';
 import 'package:leejw/voced/voced.dart';
 import 'package:leejw/voced/voced_page.dart';
 import 'package:logger/logger.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 
 Logger logger = Logger(
@@ -71,15 +76,57 @@ class GlobalState with ChangeNotifier {
     _updateTheme();
   }
 
-  bool isDarkMode() {
-    return _darkMode;
-  }
+  bool isDarkMode() => _darkMode;
 
   void _updateTheme() {
     appThemeData = _darkMode ? _dark : _light;
 
     notifyListeners();
   }
+  // ThemeData get _light => ThemeData.light(useMaterial3: true);
+  // ThemeData get _dark => ThemeData.dark(useMaterial3: true);
+  // Settings get settings => Settings("dark");
+  // set settings(Settings s) => settings.theme = s.theme;
+  // ThemeData get appThemeData {
+  //   loadData();
+  //   return settings.theme == "light" ? _light : _dark;
+  // }
+  //
+  // void nextMode() {
+  //   settings.theme = settings.theme == "light" ? "dark" : "light";
+  //   saveData();
+  //   loadData();
+  // }
+  //
+  // bool isDarkMode() => settings.theme == "dark";
+  //
+  // void saveData() async {
+  //   try {
+  //     var dir = await getApplicationSupportDirectory();
+  //     var file = File('${dir.path}/settings.json');
+  //     var content = jsonEncode(settings.toJson());
+  //     await file.writeAsString(content);
+  //   } catch (e) {
+  //     logger.e('Failed to save settings: $e');
+  //   }
+  //   notifyListeners();
+  // }
+  //
+  //  Future<Settings> loadData() async {
+  //   try {
+  //     var dir = await getApplicationSupportDirectory();
+  //     var file = File('${dir.path}/settings.json');
+  //     if (await file.exists()) {
+  //       var content = await file.readAsString();
+  //       var jsonData = jsonDecode(content);
+  //       settings = Settings.fromJson(jsonData);
+  //     }
+  //   } catch (e) {
+  //     logger.e('Failed to load settings: $e');
+  //   }
+  //   notifyListeners();
+  //   return settings;
+  // }
 }
 
 class HomePage extends StatefulWidget {
