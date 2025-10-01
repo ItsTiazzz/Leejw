@@ -223,7 +223,11 @@ class _ShowCardContent extends StatelessWidget {
 
     var fState = Provider.of<FlashState>(context);
     var children = <Widget>[];
-    children.add(Text(fState.currentHolder!.information.metaData.word,
+    var additionString = " ";
+    for (var addition in fState.currentHolder!.information.vocData.additions) {
+      additionString += "${addition.getFormattedString()} ";
+    }
+    children.add(Text("${fState.currentHolder!.information.metaData.word}$additionString",
     style: theme.textTheme.titleLarge,),);
     for (int i = 0; i < fState.currentHolder!.information.vocData.translations.length; i++) {
       var translation = fState.currentHolder!.information.vocData.translations[i].translation;
@@ -266,6 +270,13 @@ class _GuessCardContent extends StatelessWidget {
     var theme = Theme.of(context);
     var length = fState.currentHolder!.information.vocData.translations.length;
 
+    var additionString = " ";
+    for (var addition in fState.currentHolder!.information.vocData.additions) {
+      additionString += "${addition.getFormattedString()} ";
+    }
+    var text = Text("${fState.currentHolder!.information.metaData.word}$additionString",
+      style: theme.textTheme.titleLarge,);
+
     return Card(
       child: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -293,8 +304,7 @@ class _GuessCardContent extends StatelessWidget {
                         ),
                     icon: Icon(Icons.question_mark_outlined)
                 ),
-                Text(fState.currentHolder!.information.metaData.word,
-                  style: theme.textTheme.titleLarge,),
+                text,
                 IconButton.filled(onPressed: () {
 
                 }, icon: length == 1 ? Icon(Icons.looks_one_outlined) :
