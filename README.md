@@ -52,4 +52,6 @@ A lesson is a group of words from a vocabulary that are related to each other. T
 
 A flock is a group of lessons, for instance, all the lessons from a singular languages (even though language based lesson collections will be made automatically). Or all the lessons from a real life book or study method.
 
+!! Flocks are scrapped because they have no real use case, but lessons are still very much a thing.
+
 ![lessons_concept.png](./concepts/lessons_concept.png)
