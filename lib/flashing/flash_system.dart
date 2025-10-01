@@ -27,6 +27,7 @@ class FlashState extends ChangeNotifier {
 
   /// The index of the current word in the lesson's list of words.
   int index = 0;
+
   /// The results of the current lesson, mapping ids to whether they were guessed correctly.
   Map<String, bool> results = {};
 
@@ -41,10 +42,14 @@ class FlashState extends ChangeNotifier {
     // If a lesson is started, we run a small intro card to explain the lesson that follows.
     stage = 100;
     index = 0;
-    Navigator.push(context, PageRouteBuilder(
-      pageBuilder: (context, animation, secondaryAnimation) {
-        return FlashPage();
-      },));
+    Navigator.push(
+      context,
+      PageRouteBuilder(
+        pageBuilder: (context, animation, secondaryAnimation) {
+          return FlashPage();
+        },
+      ),
+    );
 
     notifyListeners();
   }
@@ -72,7 +77,9 @@ class FlashState extends ChangeNotifier {
   void flip(BuildContext context) {
     var vocState = Provider.of<VocEdState>(context, listen: false);
 
-    logger.i("Flipping stage $stage (previously $previousStage) with index $index");
+    logger.i(
+      "Flipping stage $stage (previously $previousStage) with index $index",
+    );
 
     if (stage == -1) {
       index = 0;
@@ -82,7 +89,9 @@ class FlashState extends ChangeNotifier {
     previousStage = stage;
     if (stage == 100) {
       stage = 0;
-      currentHolder = vocState.getVocHolder(currentLesson!.metaData.vocHolderIdentifiers[index]);
+      currentHolder = vocState.getVocHolder(
+        currentLesson!.metaData.vocHolderIdentifiers[index],
+      );
       notifyListeners();
     } else if (stage == 101) {
       index = 0;
@@ -101,7 +110,9 @@ class FlashState extends ChangeNotifier {
         Navigator.pop(context);
         return;
       }
-      currentHolder = vocState.getVocHolder(currentLesson!.metaData.vocHolderIdentifiers[index]);
+      currentHolder = vocState.getVocHolder(
+        currentLesson!.metaData.vocHolderIdentifiers[index],
+      );
       stage = 0;
       notifyListeners();
     } else {
@@ -121,8 +132,13 @@ class FlashState extends ChangeNotifier {
       return {};
     }
 
-    for (int i = 0; i < currentHolder!.information.vocData.translations.length; i++) {
-      var translation = currentHolder!.information.vocData.translations[i].translation;
+    for (
+      int i = 0;
+      i < currentHolder!.information.vocData.translations.length;
+      i++
+    ) {
+      var translation =
+          currentHolder!.information.vocData.translations[i].translation;
       var guess = guesses[i];
       if (guess == null || guess.isEmpty) {
         continue;
@@ -132,7 +148,9 @@ class FlashState extends ChangeNotifier {
         results[guess] = true;
       }
     }
-    logger.i('Guessed ${currentHolder!.information.metaData.word} as ${guesses.join(', ')}');
+    logger.i(
+      'Guessed ${currentHolder!.information.metaData.word} as ${guesses.join(', ')}',
+    );
     notifyListeners();
     return results;
   }
@@ -175,7 +193,7 @@ class FlashCard extends StatelessWidget {
     }
 
     Widget content;
-    switch(fState.stage) {
+    switch (fState.stage) {
       case 100:
         content = TapRegion(
           onTapInside: (event) => fState.flip(context),
@@ -184,9 +202,13 @@ class FlashCard extends StatelessWidget {
               padding: const EdgeInsets.all(16.0),
               child: Column(
                 children: [
-                  Text('Welcome to the flashcard lesson: ${lesson.metaData.title}:'),
+                  Text(
+                    'Welcome to the flashcard lesson: ${lesson.metaData.title}:',
+                  ),
                   Text(lesson.metaData.description),
-                  Text('This lesson contains ${lesson.metaData.vocHolderIdentifiers.length} words.'),
+                  Text(
+                    'This lesson contains ${lesson.metaData.vocHolderIdentifiers.length} words.',
+                  ),
                   Text('Click the card to begin.'),
                 ],
               ),
@@ -200,17 +222,12 @@ class FlashCard extends StatelessWidget {
       case 2:
         content = _FeedbackCardContent();
       case 101:
-        content = Center(
-          child: Text("Closing..."),
-        );
+        content = Center(child: Text("Closing..."));
       default:
         content = Placeholder();
     }
 
-    return Padding(
-      padding: const EdgeInsets.all(16.0),
-      child: content,
-    );
+    return Padding(padding: const EdgeInsets.all(16.0), child: content);
   }
 }
 
@@ -227,10 +244,19 @@ class _ShowCardContent extends StatelessWidget {
     for (var addition in fState.currentHolder!.information.vocData.additions) {
       additionString += "${addition.getFormattedString()} ";
     }
-    children.add(Text("${fState.currentHolder!.information.metaData.word}$additionString",
-    style: theme.textTheme.titleLarge,),);
-    for (int i = 0; i < fState.currentHolder!.information.vocData.translations.length; i++) {
-      var translation = fState.currentHolder!.information.vocData.translations[i].translation;
+    children.add(
+      Text(
+        "${fState.currentHolder!.information.metaData.word}$additionString",
+        style: theme.textTheme.titleLarge,
+      ),
+    );
+    for (
+      int i = 0;
+      i < fState.currentHolder!.information.vocData.translations.length;
+      i++
+    ) {
+      var translation =
+          fState.currentHolder!.information.vocData.translations[i].translation;
       var string = '';
       for (String _ in translation.characters) {
         string += 'x';
@@ -240,10 +266,9 @@ class _ShowCardContent extends StatelessWidget {
           children: [
             getIconForIndex(i, theme.iconTheme.size ?? 40),
             SizedBox(width: 10),
-            Text(string,
-            style: theme.textTheme.displaySmall,),
+            Text(string, style: theme.textTheme.displaySmall),
           ],
-        )
+        ),
       );
     }
 
@@ -252,9 +277,7 @@ class _ShowCardContent extends StatelessWidget {
       child: Card(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
-          child: Column(
-              children: children
-          ),
+          child: Column(children: children),
         ),
       ),
     );
@@ -274,8 +297,10 @@ class _GuessCardContent extends StatelessWidget {
     for (var addition in fState.currentHolder!.information.vocData.additions) {
       additionString += "${addition.getFormattedString()} ";
     }
-    var text = Text("${fState.currentHolder!.information.metaData.word}$additionString",
-      style: theme.textTheme.titleLarge,);
+    var text = Text(
+      "${fState.currentHolder!.information.metaData.word}$additionString",
+      style: theme.textTheme.titleLarge,
+    );
 
     return Card(
       child: Padding(
@@ -286,35 +311,37 @@ class _GuessCardContent extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 IconButton.filled(
-                    onPressed: () =>
-                        showDialog(
-                          context: context,
-                          builder: (context) {
-                            return Dialog(
-                              child: Padding(
-                                padding: const EdgeInsets.all(16.0),
-                                child: Wrap(
-                                  children: [
-                                    Text(fState.currentHolder!.information.hint)
-                                  ],
-                                )
-                              ),
-                            );
-                          },
+                  onPressed: () => showDialog(
+                    context: context,
+                    builder: (context) {
+                      return Dialog(
+                        child: Padding(
+                          padding: const EdgeInsets.all(16.0),
+                          child: Wrap(
+                            children: [
+                              Text(fState.currentHolder!.information.hint),
+                            ],
+                          ),
                         ),
-                    icon: Icon(Icons.question_mark_outlined)
+                      );
+                    },
+                  ),
+                  icon: Icon(Icons.question_mark_outlined),
                 ),
                 text,
-                IconButton.filled(onPressed: () {
-
-                }, icon: length == 1 ? Icon(Icons.looks_one_outlined) :
-                length == 2 ? Icon(Icons.looks_two_outlined) :
-                length > 2 ? Icon(Icons.looks_3_outlined) :
-                Icon(Icons.help_outline)
+                IconButton.filled(
+                  onPressed: () {},
+                  icon: length == 1
+                      ? Icon(Icons.looks_one_outlined)
+                      : length == 2
+                      ? Icon(Icons.looks_two_outlined)
+                      : length > 2
+                      ? Icon(Icons.looks_3_outlined)
+                      : Icon(Icons.help_outline),
                 ),
               ],
             ),
-            Expanded(child: GuessForm(fState.currentHolder!, (holder) {},)),
+            Expanded(child: GuessForm(fState.currentHolder!, (holder) {})),
           ],
         ),
       ),
@@ -366,10 +393,13 @@ class _GuessFormState extends State<GuessForm> {
     var l10n = AppLocalizations.of(context)!;
     var theme = Theme.of(context);
     var children = <Widget>[];
-    for (int i = 0; i <
-        fState.currentHolder!.information.vocData.translations.length; i++) {
-      var translation = fState.currentHolder!.information.vocData
-          .translations[i].translation;
+    for (
+      int i = 0;
+      i < fState.currentHolder!.information.vocData.translations.length;
+      i++
+    ) {
+      var translation =
+          fState.currentHolder!.information.vocData.translations[i].translation;
       var string = '';
       for (String _ in translation.characters) {
         string += 'x';
@@ -382,12 +412,19 @@ class _GuessFormState extends State<GuessForm> {
             Expanded(
               child: TextFormField(
                 style: theme.textTheme.displaySmall,
-                controller: i == 0 ? _one1 :
-                i == 1 ? _two2 :
-                i == 2 ? _three3 :
-                i == 3 ? _four4 :
-                i == 4 ? _five5 :
-                i == 5 ? _six6 : null,
+                controller: i == 0
+                    ? _one1
+                    : i == 1
+                    ? _two2
+                    : i == 2
+                    ? _three3
+                    : i == 3
+                    ? _four4
+                    : i == 4
+                    ? _five5
+                    : i == 5
+                    ? _six6
+                    : null,
                 decoration: InputDecoration(
                   labelText: l10n.voced_translation,
                   hintText: string,
@@ -404,7 +441,7 @@ class _GuessFormState extends State<GuessForm> {
             ),
           ],
         ),
-        SizedBox(height: 32,),
+        SizedBox(height: 32),
       ]);
     }
 
@@ -450,32 +487,39 @@ class _FeedbackCardContent extends StatelessWidget {
 
     var fState = Provider.of<FlashState>(context);
     var children = <Widget>[];
-    children.add(Text(fState.currentHolder!.information.metaData.word,
-      style: theme.textTheme.titleLarge,),);
-    for (int i = 0; i <
-        fState.currentHolder!.information.vocData.translations.length; i++) {
-      var translation = fState.currentHolder!.information.vocData
-          .translations[i].translation;
+    children.add(
+      Text(
+        fState.currentHolder!.information.metaData.word,
+        style: theme.textTheme.titleLarge,
+      ),
+    );
+    for (
+      int i = 0;
+      i < fState.currentHolder!.information.vocData.translations.length;
+      i++
+    ) {
+      var translation =
+          fState.currentHolder!.information.vocData.translations[i].translation;
       var answer = fState.results.keys.elementAt(i);
       children.add(
-          Row(
-            children: [
-              Icon(
-                fState.results[answer] == true
-                    ? Icons.check_circle_outline_outlined
-                    : Icons.cancel_outlined,
-                color: fState.results[answer] == true
-                    ? Colors.green
-                    : Colors.red,
-                size: theme.iconTheme.size ?? 40,
-              ),
-              SizedBox(width: 10),
-              Text(fState.results[answer] == true
+        Row(
+          children: [
+            Icon(
+              fState.results[answer] == true
+                  ? Icons.check_circle_outline_outlined
+                  : Icons.cancel_outlined,
+              color: fState.results[answer] == true ? Colors.green : Colors.red,
+              size: theme.iconTheme.size ?? 40,
+            ),
+            SizedBox(width: 10),
+            Text(
+              fState.results[answer] == true
                   ? answer
                   : "$answer = $translation",
-                style: theme.textTheme.displaySmall,),
-            ],
-          )
+              style: theme.textTheme.displaySmall,
+            ),
+          ],
+        ),
       );
     }
 
@@ -484,9 +528,7 @@ class _FeedbackCardContent extends StatelessWidget {
       child: Card(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
-          child: Column(
-              children: children
-          ),
+          child: Column(children: children),
         ),
       ),
     );
@@ -496,7 +538,7 @@ class _FeedbackCardContent extends StatelessWidget {
 Icon getIconForIndex(int index, double? size) {
   switch (index) {
     case 0:
-      return Icon(Icons.looks_one_outlined, size: size,);
+      return Icon(Icons.looks_one_outlined, size: size);
     case 1:
       return Icon(Icons.looks_two_outlined, size: size);
     case 2:

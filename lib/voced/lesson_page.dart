@@ -134,9 +134,12 @@ class _LessonInsightWidgetState extends State<LessonInsightWidget> {
             icon: Icon(Icons.delete_outlined),
           ),
           IconButton(
-              onPressed: () => Provider.of<FlashState>(context, listen: false).startLesson(lesson!, context),
-              icon: Icon(Icons.not_started_outlined)
-          )
+            onPressed: () => Provider.of<FlashState>(
+              context,
+              listen: false,
+            ).startLesson(lesson!, context),
+            icon: Icon(Icons.not_started_outlined),
+          ),
         ],
       ),
       body: Expanded(
@@ -236,7 +239,10 @@ class _LessonEditFormState extends State<LessonEditForm> {
             decoration: InputDecoration(
               border: OutlineInputBorder(),
               labelText: l10n.generic_tags,
-              hintText: l10n.hint_separate(l10n.generic_tags, l10n.generic_commas),
+              hintText: l10n.hint_separate(
+                l10n.generic_tags,
+                l10n.generic_commas,
+              ),
             ),
             onValueChanged: (value) => tags = value,
           ),
@@ -246,8 +252,10 @@ class _LessonEditFormState extends State<LessonEditForm> {
             decoration: InputDecoration(
               border: OutlineInputBorder(),
               labelText: l10n.generic_entries,
-              hintText:
-              l10n.hint_separate(l10n.voced_word_ids, l10n.generic_commas),
+              hintText: l10n.hint_separate(
+                l10n.voced_word_ids,
+                l10n.generic_commas,
+              ),
             ),
             onValueChanged: (value) => vocEntries = value,
             validate: (value) => vocState.getVocHolder(value) != null,

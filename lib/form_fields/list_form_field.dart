@@ -181,7 +181,9 @@ class _ListFormFieldState extends State<ListFormField> {
                   style: Theme.of(context).textTheme.titleSmall,
                 ),
                 leading: Icon(Icons.error_outline),
-                trailing: Text("${l10n.error_invalid} ${l10n.hint_swipe_to_remove}"),
+                trailing: Text(
+                  "${l10n.error_invalid} ${l10n.hint_swipe_to_remove}",
+                ),
                 // dense: true,
                 tileColor: Theme.of(context).colorScheme.errorContainer,
               ),

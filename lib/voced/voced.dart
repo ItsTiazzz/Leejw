@@ -141,7 +141,9 @@ class _VocDataHolderEditFormState extends State<VocDataHolderEditForm> {
         widget.holder!.information.metaData.originLocale,
         -1,
       );
-      _hintController = TextEditingController(text: widget.holder!.information.hint);
+      _hintController = TextEditingController(
+        text: widget.holder!.information.hint,
+      );
       meanings.addAll(
         widget.holder!.information.vocData.meanings.map(
           (e) => StringWithLocale(e.meaning, e.locale, e.group),
@@ -203,7 +205,10 @@ class _VocDataHolderEditFormState extends State<VocDataHolderEditForm> {
             decoration: InputDecoration(
               border: const OutlineInputBorder(),
               labelText: l10n.generic_entries,
-              hintText: l10n.hint_separate(l10n.generic_entries, l10n.generic_commas),
+              hintText: l10n.hint_separate(
+                l10n.generic_entries,
+                l10n.generic_commas,
+              ),
             ),
             onValueChanged: (value) => additions = value,
           ),
@@ -230,7 +235,7 @@ class _VocDataHolderEditFormState extends State<VocDataHolderEditForm> {
                           .map((e) => Meaning(e.locale, e.value, e.group))
                           .toList(),
                     ),
-                    _hintController!.text
+                    _hintController!.text,
                   ),
                 );
                 widget.holder!.write();

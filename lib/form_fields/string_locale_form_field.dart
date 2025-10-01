@@ -130,7 +130,9 @@ class _StringWithLocaleListFormFieldState
                     padding: const EdgeInsets.all(16.0),
                     child: StringWithLocaleForm(string, (newValue) {
                       _replace(newValue, index);
-                      logger.t('${newValue.value} | ${newValue.locale.toLanguageTag()}');
+                      logger.t(
+                        '${newValue.value} | ${newValue.locale.toLanguageTag()}',
+                      );
                       string = newValue;
                     }),
                   ),

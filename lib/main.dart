@@ -1,17 +1,12 @@
-import 'dart:convert';
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:leejw/dashboard.dart';
 import 'package:leejw/flashing/flash_system.dart';
 import 'package:leejw/l10n/app_localizations.dart';
-import 'package:leejw/settings/json/settings.dart';
 import 'package:leejw/settings/settings.dart';
 import 'package:leejw/voced/lesson_page.dart';
 import 'package:leejw/voced/voced.dart';
 import 'package:leejw/voced/voced_page.dart';
 import 'package:logger/logger.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 
 Logger logger = Logger(
@@ -83,6 +78,7 @@ class GlobalState with ChangeNotifier {
 
     notifyListeners();
   }
+
   // ThemeData get _light => ThemeData.light(useMaterial3: true);
   // ThemeData get _dark => ThemeData.dark(useMaterial3: true);
   // Settings get settings => Settings("dark");
