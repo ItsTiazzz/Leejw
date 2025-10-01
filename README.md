@@ -21,11 +21,10 @@ And oh yeah, for your info, Leejw stands for "**Lee**r **j**e **w**oorden," whic
 The core of Leejw of course lies in the versatile Flashcards system. It displays:  
 - [X] The main word.
 - [ ] Any additions to the word. If the addition is optional it will have a different color!
-- [ ] An indicator that is essential for knowing how to format your answer; in this case a `2x` indicating there are two answers to be given.
-- [ ] A hint/helpful info button, of which the content the users define themselves.
+- [X] An indicator that is essential for knowing how to format your answer; in this case a `2x` indicating there are two answers to be given.
+- [X] A hint/helpful info button, of which the content the users define themselves.
 - [X] (2nd page) you insert your answers for the translation/meaning.
-- [ ] A menu to insert non-standard characters (e.g. with accents).
-- [ ] (3rd page) the app checks your answer, grades it and marks what you did wrong if you made a mistake, and then gives a proper correction if it's able to.
+- [X] (3rd page) the app checks your answer, grades it and marks what you did wrong if you made a mistake, and then gives a proper correction if it's able to.
 
 These boxes will be ticked as I go on to finish this concept.  
 

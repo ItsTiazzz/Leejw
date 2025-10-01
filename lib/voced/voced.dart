@@ -122,6 +122,13 @@ class VocDataHolderEditForm extends StatefulWidget {
 class _VocDataHolderEditFormState extends State<VocDataHolderEditForm> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   StringWithLocale? string;
+  TextEditingController? _hintController;
+
+  @override
+  void dispose() {
+    _hintController?.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -134,6 +141,7 @@ class _VocDataHolderEditFormState extends State<VocDataHolderEditForm> {
         widget.holder!.information.metaData.originLocale,
         -1,
       );
+      _hintController = TextEditingController(text: widget.holder!.information.hint);
       meanings.addAll(
         widget.holder!.information.vocData.meanings.map(
           (e) => StringWithLocale(e.meaning, e.locale, e.group),
@@ -151,6 +159,7 @@ class _VocDataHolderEditFormState extends State<VocDataHolderEditForm> {
       );
     }
     var l10n = AppLocalizations.of(context)!;
+    _hintController ??= TextEditingController();
 
     return Form(
       key: _formKey,
@@ -174,6 +183,19 @@ class _VocDataHolderEditFormState extends State<VocDataHolderEditForm> {
             initialValues: translations,
             onValueChanged: (value) => translations = value,
             validate: (value) => value.value.isNotEmpty,
+          ),
+          SizedBox(height: 8),
+          TextFormField(
+            maxLines: 2,
+            controller: _hintController,
+            decoration: InputDecoration(
+              border: const OutlineInputBorder(),
+              labelText: "Donkey Bridge",
+              hintText: "You can write a Donkey Bridge (hints) here",
+            ),
+            validator: (value) {
+              return null;
+            },
           ),
           SizedBox(height: 8),
           RequirementsFormField(
@@ -208,6 +230,7 @@ class _VocDataHolderEditFormState extends State<VocDataHolderEditForm> {
                           .map((e) => Meaning(e.locale, e.value, e.group))
                           .toList(),
                     ),
+                    _hintController!.text
                   ),
                 );
                 widget.holder!.write();

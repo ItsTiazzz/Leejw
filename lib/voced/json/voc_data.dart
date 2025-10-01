@@ -44,8 +44,10 @@ class VocDataHolderJson {
   final VocMetaData metaData;
   @JsonKey(name: "voc_data")
   final VocData vocData;
+  @JsonKey(defaultValue: "")
+  final String hint;
 
-  VocDataHolderJson(this.metaData, this.vocData);
+  VocDataHolderJson(this.metaData, this.vocData, this.hint);
 
   factory VocDataHolderJson.fromJson(Map<String, dynamic> json) =>
       _$VocDataHolderJsonFromJson(json);

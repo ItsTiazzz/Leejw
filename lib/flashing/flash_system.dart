@@ -263,10 +263,50 @@ class _GuessCardContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var fState = Provider.of<FlashState>(context);
+    var theme = Theme.of(context);
+    var length = fState.currentHolder!.information.vocData.translations.length;
+
     return Card(
       child: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: GuessForm(fState.currentHolder!, (holder) {},),
+        child: Column(
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                IconButton.filled(
+                    onPressed: () =>
+                        showDialog(
+                          context: context,
+                          builder: (context) {
+                            return Dialog(
+                              child: Padding(
+                                padding: const EdgeInsets.all(16.0),
+                                child: Wrap(
+                                  children: [
+                                    Text(fState.currentHolder!.information.hint)
+                                  ],
+                                )
+                              ),
+                            );
+                          },
+                        ),
+                    icon: Icon(Icons.question_mark_outlined)
+                ),
+                Text(fState.currentHolder!.information.metaData.word,
+                  style: theme.textTheme.titleLarge,),
+                IconButton.filled(onPressed: () {
+
+                }, icon: length == 1 ? Icon(Icons.looks_one_outlined) :
+                length == 2 ? Icon(Icons.looks_two_outlined) :
+                length > 2 ? Icon(Icons.looks_3_outlined) :
+                Icon(Icons.help_outline)
+                ),
+              ],
+            ),
+            Expanded(child: GuessForm(fState.currentHolder!, (holder) {},)),
+          ],
+        ),
       ),
     );
   }

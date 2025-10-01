@@ -10,12 +10,14 @@ VocDataHolderJson _$VocDataHolderJsonFromJson(Map<String, dynamic> json) =>
     VocDataHolderJson(
       VocMetaData.fromJson(json['metadata'] as Map<String, dynamic>),
       VocData.fromJson(json['voc_data'] as Map<String, dynamic>),
+      json['hint'] as String? ?? '',
     );
 
 Map<String, dynamic> _$VocDataHolderJsonToJson(VocDataHolderJson instance) =>
     <String, dynamic>{
       'metadata': instance.metaData.toJson(),
       'voc_data': instance.vocData.toJson(),
+      'hint': instance.hint,
     };
 
 VocMetaData _$VocMetaDataFromJson(Map<String, dynamic> json) => VocMetaData(
